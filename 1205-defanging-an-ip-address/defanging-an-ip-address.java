@@ -18,9 +18,9 @@ class Solution {
        int length=address.length();
        for(int i=0;i<length;i++){
         if(address.charAt(i)=='.'){
-             result.append("[.]");
-            //  result.append(".");
-            //  result.append("]");
+             result.append("[");
+             result.append(".");
+              result.append("]");
            
         }
         else{
