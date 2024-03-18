@@ -27,7 +27,7 @@ class Solution {
             result.append(address.charAt(i));
         }
        }
-       System.out.println(result);
+      
        return result.toString();
     }
 }
