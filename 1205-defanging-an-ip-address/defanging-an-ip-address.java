@@ -14,13 +14,13 @@ class Solution {
     //    } 
     //    String str = sb.toString();
     //    return str;
-       StringBuilder result=new StringBuilder();
+      
        int length=address.length();
+        StringBuilder result=new StringBuilder();
        for(int i=0;i<length;i++){
         if(address.charAt(i)=='.'){
-             result.append("[");
-             result.append(".");
-              result.append("]");
+             result.append("[.]");
+            
            
         }
         else{
