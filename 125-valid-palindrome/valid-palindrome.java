@@ -17,10 +17,10 @@ class Solution {
        }
      }
       String line=answer.toString();
-      System.out.println(line);
+     
       answer.reverse();
       String reversed=answer.toString();
-        System.out.println(reversed);
+        
       if(line.equals(reversed)){
         return true;
       }
