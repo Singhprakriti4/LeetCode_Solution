@@ -30,7 +30,7 @@ public boolean check(String test,String pattern){
       }  
 
     }
-    System.out.println(ptr_pattern);
+    
     if(status==true){
     return true;
     }
