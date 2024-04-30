@@ -23,7 +23,7 @@ class Solution {
                 str.append("0");
             }
         }
-        str.reverse();
-        return str.toString();
+       
+        return str.reverse().toString();
     }
 }
