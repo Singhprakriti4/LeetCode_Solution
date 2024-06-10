@@ -14,24 +14,21 @@ public class Solution {
         if(head==null){
             return false;
         }
-      int pos=Integer.MIN_VALUE;
-        boolean cond=true;
-        while(cond){
-          if(head.next==null ){
-            cond=false;
-            return false;
-          }
-          else{
-            if(head.next.val==pos){
-                cond=false; 
-                return true;
+        ListNode s=head,f=head;
+       
+        do{
+            if(s==null || f==null){
+                return false;
             }
-            head.val=pos;
-            // pos++;
-            head=head.next;
-            
-          }
-        }
+            else{
+              s=s.next;
+            if(f.next==null || f.next.next==null){
+                return false;
+            }
+              f=f.next.next;
+            }
+        }while(s!=f);
         return true;
+
     }
 }
