@@ -14,21 +14,19 @@ public class Solution {
         if(head==null){
             return false;
         }
-        ListNode s=head,f=head;
-       
+
+        ListNode s=head,f=head;   
         do{
-            if(s==null || f==null){
+            if(s.next==null){
                 return false;
             }
-            else{
               s=s.next;
             if(f.next==null || f.next.next==null){
                 return false;
             }
               f=f.next.next;
-            }
         }while(s!=f);
-        return true;
 
+        return true;
     }
 }
