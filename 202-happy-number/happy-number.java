@@ -1,18 +1,20 @@
 class Solution {
     public boolean isHappy(int n) {
-        int s=1,f=0;
-        int j=n;
+        int s=1,f=0, j=n;;
         while(s!=f){
+           
+            
            s=nextvalue(n);
-            if(s==1){
+            n=s;   
+              if(s==1){
                 return true;
-            }
-           n=s;
+            }    
+           
             f=nextvalue(nextvalue(j));
-            if(f==1){
+             j=f;
+               if(f==1){
                 return true;
             }
-           j=f;
         }
  return false;
         
