@@ -13,7 +13,8 @@ class Solution {
         ListNode beg=head;
         ListNode end=head;
         ListNode last=head;
-        int n=1;
+        int n=1; int s=1;
+        
         while(last.next!=null){
             if(n>=k){
                 end=end.next;
@@ -21,11 +22,12 @@ class Solution {
             last=last.next;
             n++;
         }
-        int s=1;
+       
         while(s!=k){
             beg=beg.next;
             s++;
         }
+
         int temp=beg.val;
         beg.val=end.val;
         end.val=temp;
