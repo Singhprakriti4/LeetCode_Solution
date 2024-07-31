@@ -7,15 +7,12 @@ class RecentCounter {
     public int ping(int t) {
         timestamp.add(t);
         int ans=0;
-        for(int i=timestamp.size()-1;i>=0;i--){
-            if(t-timestamp.get(i)<=3000){
-                ans++;
-            }
-            else{
-                break;
-            }
+        int beg=0;
+        while(t-timestamp.get(beg)>3000){
+            beg++;
         }
-        return ans;
+        return timestamp.size()-beg;
+
     }
 }
 
