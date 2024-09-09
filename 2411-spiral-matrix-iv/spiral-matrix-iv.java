@@ -12,10 +12,7 @@
 class Solution {
     public int[][] spiralMatrix(int m, int n, ListNode head) {
         int[][] arr=new int[m][n];
-        int top=0;
-        int bottom=m-1;
-        int left=0;
-        int right=n-1;
+        int top=0,bottom=m-1, left=0, right=n-1;
         ListNode curr=head;
         
         while(top<=bottom && left<=right){
@@ -49,7 +46,6 @@ class Solution {
            }
            left++;
         }
-
         return arr;
     }
 }
