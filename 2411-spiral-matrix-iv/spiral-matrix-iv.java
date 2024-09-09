@@ -17,75 +17,37 @@ class Solution {
         int left=0;
         int right=n-1;
         ListNode curr=head;
-        int r=0;
-        int c=0;
-
-
+        
         while(top<=bottom && left<=right){
-          
-          while(c<=right){
-            if(curr!=null){
-                arr[r][c]=curr.val;
-            }
-            else{
-                arr[r][c]=-1;
-            }
-            if(curr!=null)curr=curr.next;
-            c++;
+          for(int i=left;i<=right;i++){
+            arr[top][i]=curr!=null?curr.val:-1;
+             if(curr!=null)curr=curr.next;
           }
-          c--;
           
           top++;
           if(top<=bottom && left<=right){
-            r++;
-            while(r<=bottom){
-                if(curr!=null){
-                    arr[r][c]=curr.val;
-                }
-                else{
-                    arr[r][c]=-1;
-                }
+            for(int j=top;j<=bottom;j++){
+                arr[j][right]=curr!=null?curr.val:-1;
                  if(curr!=null)curr=curr.next;
-                r++;
             }
-             r--;
           }
         
          right--;
          if(right>=left && top<=bottom){
-            c--;
-            while(c>=left){
-                if(curr!=null){
-                    arr[r][c]=curr.val;
-                }
-                else{
-                    arr[r][c]=-1;
-                }
+           for(int k=right;k>=left;k--){
+            arr[bottom][k]=curr!=null?curr.val:-1;
                  if(curr!=null)curr=curr.next;
-                c--;
-            }
-            c++;
+           }
          }
            
            bottom--;
            if(bottom>=top && left<=right){
-            r--;
-            while(r>=top){
-                if(curr!=null){
-                    arr[r][c]=curr.val;
-                }
-                else{
-                    arr[r][c]=-1;
-                }
+           for(int l=bottom;l>=top;l--){
+            arr[l][left]=curr!=null?curr.val:-1;
                  if(curr!=null)curr=curr.next;
-                r--; 
-            }
-            r++;
+           }
            }
            left++;
-           if(left<=right)
-           c++;
-           
         }
 
         return arr;
