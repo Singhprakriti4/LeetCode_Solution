@@ -17,9 +17,6 @@ class Solution {
         ListNode prev=head;
 
         while(curr!=null){
-            // System.out.println(curr.val);
-            // System.out.println(prev.val);
-
           int divisor=gcd(curr.val,prev.val);
           ListNode node=new ListNode();
           node.val=divisor;
