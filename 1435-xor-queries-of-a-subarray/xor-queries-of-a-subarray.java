@@ -1,18 +1,23 @@
 class Solution {
     public int[] xorQueries(int[] arr, int[][] queries) {
-     int[] ans=new int[queries.length];
-     int k=-1;
-      for(int i=0;i<queries.length;i++){ 
-        int start=queries[i][0];
-        int end=queries[i][1];
-        int value=arr[start];
-        while(start+1<=end){
-            value=value^arr[start+1];
-            start++;
-        }
-        k++;
-        ans[k]=value;
+        int[] answer=new int[queries.length]; 
+        int index=0;
+      int[] prexor=new int[arr.length]  ;
+      prexor[0]=arr[0];
+      for(int i=1;i<arr.length;i++){
+        prexor[i]=prexor[i-1]^arr[i];
       }
-      return ans;
+      for(int j=0;j<queries.length;j++){
+        int left=queries[j][0];
+        int right=queries[j][1];
+        if(left==0){
+            answer[index]= prexor[right];
+        }
+        else{
+            answer[index]=prexor[right]^prexor[left-1];
+        }
+        index++;
+      }
+      return answer;
     }
 }
