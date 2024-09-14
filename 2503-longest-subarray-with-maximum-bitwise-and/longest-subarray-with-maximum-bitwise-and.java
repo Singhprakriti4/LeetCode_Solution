@@ -19,10 +19,7 @@ class Solution {
             while(j<nums.length && nums[j]==nums[max_index]){
                 j++;
             }
-            if(j-start >maxlength ){
-                maxlength=j-start;
-            }
-            
+            maxlength=Math.max(maxlength,j-start);
            }
            else{
               j++;
