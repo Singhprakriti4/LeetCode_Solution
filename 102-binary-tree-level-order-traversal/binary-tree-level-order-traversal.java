@@ -25,9 +25,10 @@ class Solution {
         List<Integer> inner=new ArrayList<>();
 
        while(!q.isEmpty()){
-         if(q.element()!=null){
+         TreeNode n=q.poll();
+         if(n!=null){
         
-            TreeNode n=q.poll();
+           
             
             inner.add(n.val);
             if(n.left!=null)q.add(n.left);
@@ -36,7 +37,6 @@ class Solution {
          }
          else{
             outer.add(inner);
-            q.poll();
             if(q.isEmpty())break;
             inner=new ArrayList<>();
             q.add(null);
