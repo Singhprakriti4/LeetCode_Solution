@@ -24,31 +24,41 @@ class Solution {
         q.add(new Pair<>(root,new Pair<>(0,0)));
         while(!q.isEmpty()){
             Pair<TreeNode,Pair<Integer,Integer>> p=q.poll();
-            
+            //the node is the key for our outer pair
             TreeNode n=p.getKey();
-           
+            //the inner pair stores the row and the col of our node 'n'
             int row=p.getValue().getKey();
             int col=p.getValue().getValue();
+            //map me add krna properly
            
-            m.computeIfAbsent(col, k -> new TreeMap<>())
-             .computeIfAbsent(row, k -> new ArrayList<>())
-             .add(n.val);
-
+            if(m.containsKey(col)){
+                if(m.get(col).containsKey(row)){
+                  m.get(col).get(row).add(n.val);
+                }
+                else{
+                 m.get(col).put(row,new ArrayList<>(Arrays.asList(n.val)));
+                }
+            }
+            else{
+                TreeMap<Integer,ArrayList<Integer>> inner=new TreeMap<>();
+                inner.put(row, new ArrayList<>(Arrays.asList(n.val)));
+               m.put(col,inner);
+            }
              if(n.left!=null)
              q.add(new Pair<>(n.left,new Pair<>(row+1,col-1)));
              if(n.right!=null)
              q.add(new Pair<>(n.right,new Pair<>(row+1,col+1)));
         }
 
-    for (TreeMap<Integer, ArrayList<Integer>> innerMap : m.values()) {
-    List<Integer> columnList = new ArrayList<>();
-    for (ArrayList<Integer> set : innerMap.values()) {
-        Collections.sort(set);
-        columnList.addAll(set);
-    }
-    ans.add(columnList);
-}
-
+        for(Integer col: m.keySet()){
+         List<Integer> inner=new ArrayList<>();
+            for(Integer row : m.get(col).keySet()){
+               ArrayList<Integer> set=m.get(col).get(row);
+               Collections.sort(set);
+               inner.addAll(set);
+            }
+            ans.add(inner);
+        }
       return ans;
     }
     
