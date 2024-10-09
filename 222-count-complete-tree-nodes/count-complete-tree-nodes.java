@@ -14,23 +14,17 @@
  * }
  */
 class Solution {
+    int count=0;
     public int countNodes(TreeNode root) {
-        Queue<TreeNode> q=new LinkedList<>();
+      preorder(root);
+      return count;  
+    }
+    void preorder(TreeNode root){
         if(root==null){
-            return 0;
+            return;
         }
-        int count=0;
-        q.add(root);
-        while(!q.isEmpty()){
-           TreeNode n=q.poll();
-           count++;
-           if(n.left!=null){
-            q.add(n.left);
-           }
-           if(n.right!=null){
-            q.add(n.right);
-           }
-        }
-        return count;
+        count++;
+        preorder(root.left);
+        preorder(root.right);
     }
 }
