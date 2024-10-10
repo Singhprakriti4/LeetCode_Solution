@@ -24,32 +24,5 @@ class Solution {
     return trapped_rain;
 
     }
-    // public int maxindex_left(int index,int[] height){
-    //    if(index==0){
-    //     return height[0];
-    //    }
-    //    int ans=0;
-    //    int max_val=0;
-    //    while (ans<=index){
-    //     if(height[ans]>max_val){
-    //         max_val=height[ans];
-    //     }
-    //     ans++;
-    //    }
-    //    return max_val;
-    // }
-    // public int maxindex_right(int index,int[] height){
-    //     if(index==height.length-1){
-    //         return height[index];
-    //     }
-    //     int ans=height.length-1;
-    //     int max_val=0;
-    //     while(ans>=index){
-    //         if(height[ans]>max_val){
-    //             max_val=height[ans];
-    //         }
-    //         ans--;
-    //     }
-    //     return max_val;
-    // }
+    
 }
