@@ -25,8 +25,10 @@ class Solution {
         if(left>right){
             return null;
         }     
+
         int root_val=0;
         int index=0;
+
         for(int i=0;i<preorder.length;i++){
             if(m.containsKey(preorder[i]) && (m.get(preorder[i])<=right && m.get(preorder[i])>=left)){
                 root_val=preorder[i];
@@ -34,7 +36,7 @@ class Solution {
                 break;
             }
         }
-        // System.out.println(root_val +" "+ index);
+        
        TreeNode root=new TreeNode(root_val);
         root.left=tree(preorder,inorder,left,index-1,m);
         root.right=tree(preorder,inorder,index+1,right,m);
