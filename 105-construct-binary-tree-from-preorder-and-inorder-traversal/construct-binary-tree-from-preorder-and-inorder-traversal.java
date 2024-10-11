@@ -14,6 +14,7 @@
  * }
  */
 class Solution {
+    int preindex=0;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         Map<Integer,Integer> m=new HashMap<>();
         for(int i=0;i<inorder.length;i++){
@@ -28,14 +29,11 @@ class Solution {
 
         int root_val=0;
         int index=0;
-
-        for(int i=0;i<preorder.length;i++){
-            if(m.containsKey(preorder[i]) && (m.get(preorder[i])<=right && m.get(preorder[i])>=left)){
-                root_val=preorder[i];
-                index=m.get(preorder[i]);
-                break;
-            }
-        }
+        
+        root_val=preorder[preindex];
+        index=m.get(root_val);
+        preindex+=1;
+        
         
        TreeNode root=new TreeNode(root_val);
         root.left=tree(preorder,inorder,left,index-1,m);
