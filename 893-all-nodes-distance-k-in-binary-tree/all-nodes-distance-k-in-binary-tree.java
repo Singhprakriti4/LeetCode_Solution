@@ -11,10 +11,8 @@ class Solution {
     List<Integer> ans=new ArrayList<>();
     Map<TreeNode,TreeNode> m=new HashMap<>();
     public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
-        List<Integer> array=new ArrayList<>();
-        parent(root);
-        array.add(target.val);
-      dist(root,target,target,0,k,array);
+      parent(root);
+      dist(root,target,target,0,k);
       return ans;
     }
     public void parent(TreeNode root){
@@ -31,7 +29,7 @@ class Solution {
         parent(root.right);
     }
    
-    public void dist(TreeNode root,TreeNode target,TreeNode fixed,int curr_count,int req_count,List<Integer> array){
+    public void dist(TreeNode root,TreeNode target,TreeNode fixed,int curr_count,int req_count){
         if(target==null){
             return;
         }
@@ -43,23 +41,17 @@ class Solution {
 
     if(m.containsKey(target)){
         TreeNode p=m.get(target);
-       if( p!=null && p!=fixed && !array.contains(p.val) ){
-         array.add(p.val);
-       dist(root,p,fixed,curr_count +1, req_count,array);
-        array.remove(Integer.valueOf(p.val));
+       if( p!=null && p!=fixed ){
+       dist(root,p,target,curr_count +1, req_count);
        }
     }
        
-       if(target.left!=fixed && target.left!=null && !array.contains(target.left.val)){
-        array.add(target.left.val);
-       dist(root,target.left,fixed,curr_count+1,req_count,array);
-        array.remove(Integer.valueOf(target.left.val));
+       if(target.left!=fixed && target.left!=null ){
+       dist(root,target.left,target,curr_count+1,req_count);
        }
        
-       if(target.right!=fixed && target.right!=null && !array.contains(target.right.val)){
-        array.add(target.right.val);
-       dist(root,target.right,fixed,curr_count+1,req_count,array);
-       array.remove(Integer.valueOf(target.right.val));
+       if(target.right!=fixed && target.right!=null){
+       dist(root,target.right,target,curr_count+1,req_count);
        }
     }
 }
