@@ -14,12 +14,13 @@
  * }
  */
 class Solution {
-    List<TreeNode> list=new ArrayList<>();
+   
     public void recoverTree(TreeNode root) {
         TreeNode one=null;
         TreeNode two=null;
+         List<TreeNode> list=new ArrayList<>();
 
-        inorder(root);
+        inorder(root,list);
         int[] arr=new int[list.size()];
         for(int i=0;i<arr.length;i++){
             arr[i]=list.get(i).val;
@@ -43,12 +44,12 @@ class Solution {
         two.val=temp;
         
     }
-    public void inorder(TreeNode root){
+    public void inorder(TreeNode root, List<TreeNode> list){
         if(root==null)
         return;
 
-        inorder(root.left);
+        inorder(root.left,list);
         list.add(root);
-        inorder(root.right);
+        inorder(root.right,list);
     }
 }
