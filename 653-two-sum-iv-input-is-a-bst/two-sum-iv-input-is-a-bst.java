@@ -14,22 +14,19 @@
  * }
  */
 class Solution {
+     Set<Integer> m=new HashSet<>();
     public boolean findTarget(TreeNode root, int k) {
-        Map<Integer,TreeNode> m=new HashMap<>();
-        return find(root,k,m);
-
-    }
-    public boolean find(TreeNode root,int k,Map<Integer,TreeNode> m){
-        if(root==null){
+       
+         if(root==null){
             return false;
         }
-        if(m.containsKey(k-root.val)){
+        if(m.contains(k-root.val)){
             return true;
         }
         else{
-            m.put(root.val,root);
+            m.add(root.val);
         }
-        return (find(root.left,k,m) || find(root.right,k,m));
+        return (findTarget(root.left,k) || findTarget(root.right,k));
     }
 
 }
