@@ -31,9 +31,6 @@ class Solution {
             if(indegree[e]==0){
                 q.add(e);
             }
-            if(indegree[e]<0){
-                return new int[]{};
-            }
         }
        }
        if(ptr<ans.length-1){
