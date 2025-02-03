@@ -5,17 +5,11 @@ class Solution {
         }
         int ans=x%10;
         x=x/10;
-        boolean counter=false;
         while(x!=0){
-            if(counter){
+             if(Math.abs(ans)>Integer.MAX_VALUE/10){
                 return 0;
             }
             ans=ans*10+x%10;
-
-            if(Math.abs(ans)>Integer.MAX_VALUE/10){
-                counter=true;
-            }
-
             x=x/10;
         }
        
