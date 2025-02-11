@@ -8,13 +8,16 @@ class Solution {
     }
     public void ss(int[] nums,int index,ArrayList<Integer> list){
         if(index==nums.length){
+            //return the copy of the final list
+            //not the same refrence of list
            ans.add(new ArrayList<>(list));
             return;
         }
+
+        ss(nums,index+1,list);
         list.add(nums[index]);
         ss(nums,index+1,list);
         list.remove(list.size()-1);
-        ss(nums,index+1,list);
 
     }
 }
