@@ -4,43 +4,35 @@ class Solution {
         return "";
        }
        ArrayList<String> ans=new ArrayList<>();
-       ArrayList<Character> list=new ArrayList<>();
+      StringBuilder list=new StringBuilder();
    
     happy(n,list,'d',ans);
-    // Collections.sort(ans);
     return ans.get(k-1);
     }
-    public void happy(int n,ArrayList<Character> list,char parent, ArrayList<String> ans){
+    public void happy(int n,StringBuilder list,char parent, ArrayList<String> ans){
         //base case
-        if(list.size()==n){
+        if(list.length()==n){
             //convert in string and store in ans
-            String s=convert(list);
-            ans.add(s);
+            ans.add(list.toString());
             return;
         }
         //loop of all possibility
         if('a'!=parent){
-            list.add('a');
+            list.append('a');
             happy(n,list,'a',ans);
-            list.remove(list.size()-1);
+            list.deleteCharAt(list.length()-1);
         }
         if('b'!=parent){
-            list.add('b');
+            list.append('b');
             happy(n,list,'b',ans);
-            list.remove(list.size()-1);
+            list.deleteCharAt(list.length()-1);
         }
         if('c'!=parent){
-            list.add('c');
+            list.append('c');
             happy(n,list,'c',ans);
-            list.remove(list.size()-1);
+            list.deleteCharAt(list.length()-1);
         }
 
     }
-    public String convert(ArrayList<Character> list){
-        StringBuilder str=new StringBuilder();
-        for(int i=0;i<list.size();i++){
-            str.append(list.get(i));
-        }
-        return str.toString();
-    }
+    
 }
