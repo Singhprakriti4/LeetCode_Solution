@@ -1,23 +1,22 @@
 class Solution {
+    List<List<Integer>> ans=new ArrayList<>();
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-       List<List<Integer>> ans=new ArrayList<>();
-       List<Integer> innerlist=new ArrayList<>(); 
-       combo(0,candidates,target,ans,innerlist,0);
-       return ans;
+        ArrayList<Integer> list=new ArrayList<>();
+        combo(candidates,target,0,0,list);
+        return ans;
     }
-    public void combo(int index, int[] candidates,int target , List<List<Integer>> ans,List<Integer> inner,int sum){
+    public void combo(int[] c,int target,int sum,int index,ArrayList<Integer> list){
         if(sum==target){
-            ans.add(new ArrayList<>(inner));
+            ans.add(new ArrayList<>(list));
             return;
         }
-        if(index==candidates.length || sum>target){
+        if(sum>target || index==c.length){
             return;
         }
-
-        inner.add(candidates[index]);
-        combo(index,candidates,target,ans,inner,sum+candidates[index]);
-        inner.remove(inner.size()-1);
-        combo(index+1,candidates,target,ans,inner,sum);
-
+       //
+       list.add(c[index]);
+       combo(c,target,sum+c[index],index,list);
+       list.remove(list.size()-1);
+       combo(c,target,sum,index+1,list);
     }
 }
