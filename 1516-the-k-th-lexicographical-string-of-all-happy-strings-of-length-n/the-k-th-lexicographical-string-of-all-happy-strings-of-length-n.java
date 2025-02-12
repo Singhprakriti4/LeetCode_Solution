@@ -5,12 +5,9 @@ class Solution {
        }
        ArrayList<String> ans=new ArrayList<>();
        ArrayList<Character> list=new ArrayList<>();
-    //    ArrayList<Character> possible=new ArrayList<>();
-    //    possible.add('a');
-    //    possible.add('b');
-    //    possible.add('c');
+   
     happy(n,list,'d',ans);
-    Collections.sort(ans);
+    // Collections.sort(ans);
     return ans.get(k-1);
     }
     public void happy(int n,ArrayList<Character> list,char parent, ArrayList<String> ans){
