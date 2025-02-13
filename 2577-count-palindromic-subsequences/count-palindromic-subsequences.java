@@ -20,14 +20,6 @@ class Solution {
             suffix[num]+=1;
         }
 
-        
-        // for(int i=0;i<10;i++){
-        //     for(int j=0;j<10;j++){
-        //         System.out.print(suffix2d[i][j]+" ");
-        //     }
-        //     System.out.println();
-        // }
-
         int ans=0;
         for(int i=0;i<=s.length()-3;i++){
             int prev=0;
