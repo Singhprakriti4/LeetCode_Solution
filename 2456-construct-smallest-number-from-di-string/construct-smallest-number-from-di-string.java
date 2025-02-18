@@ -1,5 +1,5 @@
 class Solution {
-            String solution="";
+    String solution="";
 
     public String smallestNumber(String pattern) {
         //making set for possibilities
@@ -14,13 +14,11 @@ class Solution {
 
         //base case
         if(index==pattern.length()+1){
-            if(solution=="" || Long.valueOf(solution)>Long.valueOf(str.toString())){
-                StringBuilder s=new StringBuilder(str.toString());
-                solution=s.toString();
+         if(solution=="" || Long.valueOf(solution)>Long.valueOf(str.toString())){
+                solution=str.toString();
             }
             return;
         }
-        boolean valid=false;
         //current character
          char curr='a';
           if(index<pattern.length()){
@@ -31,33 +29,19 @@ class Solution {
 
             if(set[i]==false){
                 int num=i;
-                if((ch=='I' && parent<num)||(ch=='D' && parent>num)){
-                valid=true;
+                if(parent==-1 || (ch=='I' && parent<num)||(ch=='D' && parent>num)){
                 str.append(num);
                 //removing num from set(possibilities) for next call
                 set[num]=true;
                 //next call
                 small(index+1,curr,num,pattern,set,str);
-                
-                
+            
                 //backtracking
                 set[num]=false;
                 str.deleteCharAt(str.length()-1);
             }
-            else if(parent==-1){
-                valid=true;
-              //all possibility is there
-              str.append(num);
-              set[num]=true;
-              small(index+1,curr,num,pattern,set,str);
-              set[num]=false;
-              str.deleteCharAt(str.length()-1);
-            }
             }
            
-        }
-        if(!valid){
-            return;
         }
     }
 }
