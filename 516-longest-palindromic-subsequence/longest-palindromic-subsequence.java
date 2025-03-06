@@ -1,26 +1,30 @@
 class Solution {
+    //time complexity -n power 2
     public int longestPalindromeSubseq(String s) {
-        int[][] dp=new int[s.length()][s.length()];
-        for(int [] r: dp){
-            Arrays.fill(r,-1);
-        }
-        return count(0,s.length()-1,dp,s);
-    }
-    public int count(int i, int j, int[][] dp , String s){
-        if(i==j){
-            return 1;
-        }
-        if(i>j){
-            return 0;
-        }
-        if(dp[i][j]!=-1) return dp[i][j];
 
-        if(s.charAt(i)==s.charAt(j)){
-            dp[i][j]=2+count(i+1,j-1,dp,s);
+        //bottom up
+        int[][]dp=new int[s.length()][s.length()];
+        //initialize diagonals as 1
+
+        for(int i=0;i<s.length();i++){
+            dp[i][i]=1;
         }
-        else{
-            dp[i][j]=Math.max(count(i+1,j,dp,s),count(i,j-1,dp,s));
+        for(int col=1;col<dp.length;col++){
+            int i=0;
+            int j=col;
+            while(i<dp.length && j<dp.length){
+                if(s.charAt(i)==s.charAt(j) ){
+                    
+                    dp[i][j]=2+dp[i+1][j-1];
+                    
+                }
+                else{
+                    dp[i][j]=Math.max(dp[i+1][j],dp[i][j-1]);
+                }
+                i++;
+                j++;
+            }
         }
-        return dp[i][j];
+        return dp[0][s.length()-1];
     }
 }
