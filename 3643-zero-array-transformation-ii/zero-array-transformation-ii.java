@@ -4,7 +4,8 @@ class Solution {
         int start=-1;
         int end=queries.length-1;
         int ans=-1;
-
+        if(!iszero(queries.length-1,queries,nums)) return -1;
+        
         while(start<=end){
             int mid=start+(end-start)/2;
             if(iszero(mid,queries,nums)){
