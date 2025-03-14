@@ -1,18 +1,13 @@
 class Solution {
     public int maximumCandies(int[] candies, long k) {
-       int max=0;
-       for(int i=0;i<candies.length;i++){
-        if(candies[i]>max){
-            max=candies[i];
-        }
-       }
+       
        if(k==0){
         return 0;
        }
 
        int ans=0;
        int start=0;
-       int end=max;
+       int end=Integer.MAX_VALUE;
        while(start<=end){
         int mid=start+(end-start)/2;
         if(possible(mid,candies,k)){
