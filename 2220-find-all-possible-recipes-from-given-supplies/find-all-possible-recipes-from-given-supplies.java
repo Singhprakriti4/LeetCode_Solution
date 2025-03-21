@@ -7,11 +7,6 @@ class Solution {
         HashMap<String,Integer> indegree=new HashMap<>();
         HashMap<String,List<String>> adj=new HashMap<>();
         Queue<String> q=new LinkedList<>();
-        HashSet<String> rec=new HashSet<>();
-
-        for(int i=0;i<recipes.length;i++){
-            rec.add(recipes[i]);
-        }
 
         //calculating indegree and the adjecency list 
         //indegree of the suplies will be 0
@@ -48,7 +43,7 @@ class Solution {
                 indegree.put(val,indegree.get(val)-1);
                 int in=indegree.get(val);
 
-                if(in==0 && rec.contains(val)){
+                if(in==0){
                     ans.add(val);
                     q.add(val);
                 }
