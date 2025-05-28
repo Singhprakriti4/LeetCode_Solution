@@ -1,43 +1,31 @@
 class Solution {
     public int minDistance(String word1, String word2) {
-        int[][] dp=new int[word1.length()+1][word2.length()+1];
-        for(int i=0;i<word1.length()+1;i++){
-            Arrays.fill(dp[i],-1);
-        }
-        return func(word1, 0, word2, 0, dp);
-        // return -1;
-    }
-    public int func(String s1, int i, String s2, int j, int[][] dp){
-        //base case
-        if(i==s1.length() && j==s2.length()){
-            return 0;
-        }
-        if(j==s2.length() && i!=s1.length()){
-            //delete the remaining char from s1
-            return s1.length()-i;
-        }
-        if(i==s1.length() && j!=s2.length()){
-            //add remaining cgar in s1
-            return s2.length()-j;
-        }
-        if(dp[i][j]!=-1){
-            return dp[i][j];
+
+       int dp[][]=new int[word1.length()+1][word2.length()+1];
+
+        //last row= word2.length()-j
+        for(int j=0;j<word2.length();j++){
+            dp[word1.length()][j]=word2.length()-j;
         }
 
-        int ans=Integer.MAX_VALUE;
-        if(s1.charAt(i)==s2.charAt(j)){
-            ans= func(s1, i+1, s2, j+1, dp);
+        //last col=word1.length()-i
+        for(int i=0;i<word1.length();i++){
+            dp[i][word2.length()]=word1.length()-i;
         }
-        else{
-            //deletion
-            ans=Math.min(ans, 1+func(s1, i+1, s2, j, dp));
-            //replace
-            ans=Math.min(ans, 1+func(s1, i+1, s2, j+1, dp));
-            //insert
-            ans=Math.min(ans, 1+func(s1, i, s2, j+1, dp));
+
+        dp[word1.length()][word2.length()]=0;
+
+        for(int i=word1.length()-1;i>=0;i--){
+            for(int j=word2.length()-1;j>=0;j--){
+                if(word1.charAt(i)==word2.charAt(j)){
+                    dp[i][j]=dp[i+1][j+1];
+                }
+                else{
+                    dp[i][j]=Math.min(1+dp[i+1][j+1], Math.min(1+dp[i+1][j], 1+dp[i][j+1]));
+                }
+            }
         }
         
-        dp[i][j]=ans;
-        return ans;
+        return dp[0][0];
     }
 }
