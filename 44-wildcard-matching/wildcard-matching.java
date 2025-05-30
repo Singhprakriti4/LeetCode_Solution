@@ -1,39 +1,77 @@
 class Solution {
     public boolean isMatch(String s, String p) {
-        int [][] dp=new int[s.length()][p.length()];
-        for(int[] row:dp){
-            Arrays.fill(row,-1);
-        }
-        int i= match(0,0,s,p,dp);
-        if(i==0){
-            return false;
-        }
-        return true;
-
+        int[][] dp=new int[s.length()+1][p.length()+1];
+        //0-> not calculated
+        //1-> true
+        //2-> false
+        return match(0, 0, s, p, dp);
     }
-    public int match(int i, int j, String s, String p,int[][] dp){
-        if(i==s.length() && j==p.length()){
-            return 1;
+    public boolean match(int i, int j, String s, String p, int[][] dp){
+
+        if(i==s.length() && j==p.length()) {
+            // System.out.println(s.charAt(i-1)+" "+p.charAt(j-1));
+            return true;
         }
+
         if(i==s.length() && j!=p.length()){
-            for(int k=j;k<p.length();k++){
-                if(p.charAt(k)!='*'){
-                 return 0;
-                }
+           
+            if(p.charAt(j)=='*') 
+            {    
+                
+                return match(i, j+1, s, p, dp);
             }
-            return 1;
+            else
+            { 
+                
+                return false;
+            }
+        }
+
+        if(i!=s.length() && j==p.length()) return false;
+
+        if(dp[i][j]!=0){
+            if(dp[i][j]==1) return true;
+            else return false;
+        }
+
+        if(p.charAt(j)!='?' && p.charAt(j)!='*'){
+           
+            if(s.charAt(i)!=p.charAt(j)){
+                //  System.out.println(s.charAt(i)+" "+p.charAt(j));
+                dp[i][j]=2;
+                 return false;
+            }
+            else{
+            boolean res= match(i+1, j+1, s, p, dp);
+            if(res==true) dp[i][j]=1;
+            else dp[i][j]= 2;
+            return res;
+            }
+        }
+
+        if(p.charAt(j)=='?'){
+            // System.out.println(s.charAt(i)+" "+p.charAt(j));
+            boolean res=match(i+1, j+1, s, p, dp); 
+            if(res==true) dp[i][j]=1;
+            else dp[i][j]=2;
+            return res;
         }
         
-        if(i>=s.length() || j>=p.length()) return 0;
+        if(p.charAt(j)=='*'){
+            boolean ans=false;
+            //try all different combinations
+            for(int leap=0; leap<=s.length()-i; leap++){
+                ans=ans || match( i+leap, j+1, s, p, dp);
+            }
 
-        if(dp[i][j]!=-1) return dp[i][j];
+            if(ans==true) {
+                dp[i][j]=1;
+                return ans;
+            }
 
-        if((s.charAt(i)==p.charAt(j)) || p.charAt(j)=='?'){
-           return dp[i][j] =match(i+1,j+1,s,p,dp);
         }
-        else if(p.charAt(j)=='*'){
-         return dp[i][j]=Math.max(match(i+1,j,s,p,dp),match(i,j+1,s,p,dp));
-        }
-        return dp[i][j]=0;
+        
+        dp[i][j]=2;
+        return false;
     }
 }
