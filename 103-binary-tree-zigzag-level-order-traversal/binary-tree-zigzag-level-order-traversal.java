@@ -15,38 +15,44 @@
  */
 class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
-        List<List<Integer>> ans= new ArrayList<>();
+        boolean flag=false;
         Queue<TreeNode> q=new LinkedList<>();
-        if(root==null){
-            return ans;
-        }
-        q.add(root);
-        q.add(null);
-        int count=0;
-        List<Integer> inner=new ArrayList<>();
-        while(!q.isEmpty()){
-            TreeNode n=q.poll();
-            if(n!=null){
+        List<List<Integer>> list=new ArrayList<>();
 
-                inner.add(n.val);
-                if(n.left!=null)q.add(n.left);
-                if(n.right!=null)q.add(n.right);
+        if(root==null){
+            return list;
+        }
+        else{
+            q.add(root);
+            q.add(null);
+        }
+
+        List<Integer> inner=new ArrayList<>();
+
+        while(!q.isEmpty()){
+            TreeNode node=q.remove();
+            if(node!=null){
+                inner.add(node.val);
+                if(node.left!=null){
+                    q.add(node.left);
+                }
+                if(node.right!=null){
+                    q.add(node.right);
+                }
             }
             else{
-              if(count%2==0){
-                ans.add(inner);
-              }
-              else{
+               if(flag){
                 Collections.reverse(inner);
-                ans.add(inner);
-              }
-              count++;
-              if(q.isEmpty())break;
-              inner=new ArrayList<>();
-              q.add(null);
+               }
+               flag=!flag;//flag change
+               list.add(inner);
 
+               if(!q.isEmpty()){
+                inner=new ArrayList<>();
+                q.add(null);
+               }
             }
         }
-        return ans;
+        return list;
     }
 }
