@@ -13,44 +13,34 @@
  *     }
  * }
  */
+ //start indexing from 1 always;
 class Solution {
+    int maxwidth=1;
     public int widthOfBinaryTree(TreeNode root) {
-        TreeMap<Integer, ArrayList<Long>> map=new TreeMap<>();
-        helper(root, 1, 0, map);
-       
-        long ans=0;
-        for(Map.Entry<Integer, ArrayList<Long>> entry: map.entrySet()){
-            ArrayList<Long> list=entry.getValue();
-            Collections.sort(list);
-            long start=list.get(0);
-            long end= list.get(list.size()-1);
-            long curr=end-start+1;
-            if(curr>ans) ans=curr;
+        if(root==null){
+            return 0;
         }
+        ArrayList<Integer> list=new ArrayList<>();
+        helper(root, list, 1, 0);
+        return maxwidth;
 
-        return (int)ans;
     }
-    public void helper(TreeNode root, long idx, int level, TreeMap<Integer,ArrayList<Long>> map){
+    public void helper(TreeNode root, ArrayList<Integer> list, int idx, int level){
         if(root==null){
             return;
         }
-        //addidx in the map
-        if(!map.containsKey(level)){
-            ArrayList<Long> list=new ArrayList<>();
+
+        if(level>= list.size()){
+            //not exists
             list.add(idx);
-            map.put(level,list);
         }
         else{
-            map.get(level).add(idx);
+            //contains first index
+            int curr= idx-list.get(level)+1;
+            if(curr>maxwidth) maxwidth=curr;
         }
 
-        // if(idx==0){
-        //     helper(root.left, 1, level+1, map);
-        //     helper(root.right, 2, level+1, map);
-        // }
-        // else{
-            helper(root.left, 2*idx, level+1, map);
-            helper(root.right, 2*idx+1, level+1, map);
-        // }
+        helper(root.left, list, 2*idx, level+1);
+        helper(root.right, list, 2*idx+1, level+1);
     }
 }
