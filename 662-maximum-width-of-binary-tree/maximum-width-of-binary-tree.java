@@ -13,65 +13,44 @@
  *     }
  * }
  */
- class Pair<K,V>{
-   public K key;
-   public V value;
-
-   public Pair(K key,V value){
-    this.key=key;
-    this.value=value;
-   }
-
-   public K getKey(){
-    return key;
-   }
-
-   public V getValue(){
-    return value;
-   }
- }
 class Solution {
     public int widthOfBinaryTree(TreeNode root) {
-        if(root==null){
-            return 0;
+        TreeMap<Integer, ArrayList<Long>> map=new TreeMap<>();
+        helper(root, 1, 0, map);
+       
+        long ans=0;
+        for(Map.Entry<Integer, ArrayList<Long>> entry: map.entrySet()){
+            ArrayList<Long> list=entry.getValue();
+            Collections.sort(list);
+            long start=list.get(0);
+            long end= list.get(list.size()-1);
+            long curr=end-start+1;
+            if(curr>ans) ans=curr;
         }
-        if( root.left==null && root.right==null)
-        return 1;
-        int result=0;
-        ArrayList<Pair<TreeNode, Integer>> list=new ArrayList<>();
-        list.add(new Pair<>(root,0));
-        list.add(new Pair<>(null,0));
-        
-        while(list.size()!=0){
-            Pair<TreeNode,Integer> node=list.remove(0);
-            TreeNode n=node.getKey();
-            int dist=node.getValue();
-            if(n!=null){
-             if(n.left!=null){
-                list.add(new Pair<>(n.left,dist*2));
-             }
-             if(n.right!=null){
-                list.add(new Pair<>(n.right,dist*2+1));
-             }
 
-            }
-            else{
-              if(list.size()!=0){
-                list.add(new Pair<>(null,0));
-                        
-            Pair<TreeNode, Integer> p=list.get(0);
-            System.out.println(list.size());
-            Pair<TreeNode, Integer> q=list.get(list.size()-2);
-            int l=p.getValue();
-            int r=q.getValue();
-
-            if(result<r-l+1){
-                result=r-l+1;
-            }
-
-            }
-        }
+        return (int)ans;
     }
-        return result;
+    public void helper(TreeNode root, long idx, int level, TreeMap<Integer,ArrayList<Long>> map){
+        if(root==null){
+            return;
+        }
+        //addidx in the map
+        if(!map.containsKey(level)){
+            ArrayList<Long> list=new ArrayList<>();
+            list.add(idx);
+            map.put(level,list);
+        }
+        else{
+            map.get(level).add(idx);
+        }
+
+        // if(idx==0){
+        //     helper(root.left, 1, level+1, map);
+        //     helper(root.right, 2, level+1, map);
+        // }
+        // else{
+            helper(root.left, 2*idx, level+1, map);
+            helper(root.right, 2*idx+1, level+1, map);
+        // }
     }
 }
