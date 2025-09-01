@@ -14,58 +14,33 @@
  * }
  */
 class Solution {
-    public TreeNode buildTree(int[] preorder1, int[] inorder) {
+    int index=0;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
 
-        ArrayList<Integer> inset=new ArrayList<>();
-        for(int i=0;i<inorder.length;i++){
-            inset.add(inorder[i]);
-        }
-
-        ArrayList<Integer> preorder=new ArrayList<>();
-        for(int i=0;i<preorder1.length;i++){
-            preorder.add(preorder1[i]);
-        }
-
-        return helper(preorder,inset);
+        return helper(preorder,inorder, 0, inorder.length-1);
 
     }
-    public TreeNode helper(ArrayList<Integer> preorder, ArrayList<Integer> inset){
+    public TreeNode helper(int[] preorder, int[] inorder, int start, int end){
 
-        if(inset.size()==0 || preorder.size()==0){
+        if(end-start<0 || index>=preorder.length ){
             return null;
         }
 
         //create the root
-        TreeNode root=new TreeNode(preorder.get(0));
+        TreeNode root=new TreeNode(preorder[index]);
 
-        //split the set & create the left and right
+        //split the sets
         int partition=-1;
-        for(int i=0;i<inset.size();i++){
-            if(inset.get(i).equals(preorder.get(0))){
+        for(int i=start;i<=end;i++){
+            if(inorder[i]==preorder[index]){
                 partition=i;
                 break;
             }
         }
-        ArrayList<Integer> leftset=new ArrayList<>();
-        ArrayList<Integer> rightset=new ArrayList<>();
-        if(partition!=0){
-          leftset=new ArrayList<>(inset.subList(0,partition));
-        }
-        if(partition!=inset.size()-1){
-           rightset=new ArrayList<>(inset.subList(partition+1,inset.size()));
-        }
-
-        inset.remove(partition);
-        preorder.remove(0);
-
-        root.left=helper(preorder,leftset);
-        if(root.left==null){
-             root.right=helper(preorder, rightset);
-        }
-        else{
-        root.right=helper(preorder, rightset);
-        }
-
+        index+=1;
+        root.left=helper(preorder,inorder, start, partition-1);
+        root.right=helper(preorder, inorder, partition+1, end);
+        
         //return root
         return root;
     }
