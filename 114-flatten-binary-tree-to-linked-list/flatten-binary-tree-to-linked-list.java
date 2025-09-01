@@ -14,35 +14,35 @@
  * }
  */
 class Solution {
+    TreeNode ptr;//global pointer 
     public void flatten(TreeNode root) {
-      List<TreeNode> nodes=new ArrayList<>();
-      if(root!=null)
-      TreeNode_flat(root,nodes);
+        ptr=root;
+        dfs(root);
+        //send everything to right;
+        helper(root);
     }
-    public void TreeNode_flat(TreeNode root,List<TreeNode> nodes){
-        if(root.left==null && root.right==null && nodes.size()==0){
+    public void dfs(TreeNode root){
+        if(root==null){
             return;
         }
-        if(root.left==null && root.right==null){
-            root.right=nodes.get(0);
-            nodes.remove(0);
-            TreeNode_flat(root.right,nodes);
+        if(root.left!=null){
+            ptr=root.left;
+            dfs(root.left);
         }
-        else{
-            if(root.left==null){
-                TreeNode_flat(root.right,nodes);
-            }
-            else if(root.right==null){
-                root.right=root.left;
-                root.left=null;
-                TreeNode_flat(root.right,nodes);
-            }
-            else{
-                nodes.add(0,root.right);
-                root.right=root.left;
-                root.left=null;
-                TreeNode_flat(root.right,nodes);
-            }
+        if(root.right!=null){
+            ptr.left=root.right;
+            root.right=null;
+            ptr=ptr.left;
+            dfs(ptr);
         }
+    }
+
+    public void helper(TreeNode root){
+        if(root==null){
+            return;
+        }
+        root.right=root.left;
+        root.left=null;
+        helper(root.right);
     }
 }
