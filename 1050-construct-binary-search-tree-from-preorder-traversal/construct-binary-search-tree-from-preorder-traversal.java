@@ -15,33 +15,25 @@
  */
 class Solution {
     public TreeNode bstFromPreorder(int[] preorder) {
-        //if the preorder is empty i.e. there is no tree
-        if(preorder.length==0){
-            return null;
+
+        TreeNode root=new TreeNode(preorder[0]);
+
+        for(int i=1;i<preorder.length;i++){
+           root= insert(root,preorder[i]);
         }
 
-        //make the root
-       TreeNode root= new TreeNode(preorder[0]);
-
-       //insert all the elements from preorder leaving the 0th index(already created)into the root 
-        for(int i=1;i<preorder.length;i++){
-           insert(root,preorder[i]) ;
+        return root;
+    }
+    public TreeNode insert(TreeNode root, int val){
+        if(root==null){
+            return new TreeNode(val);
+        }
+        if(root.val<val){
+            root.right=insert(root.right,val);
+        }
+        if(root.val>val){
+            root.left=insert(root.left,val);
         }
         return root;
     }
-
-    //function to insert a key into a given tree 
-  public TreeNode insert(TreeNode root,int key){
-    if(root==null){
-        return new TreeNode(key);
-    }
-    if(root.val>key){
-        root.left=insert(root.left,key);
-    }
-    if(root.val<key){
-        root.right=insert(root.right,key);
-    }
-
-    return root;
-  }
 }
