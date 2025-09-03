@@ -13,20 +13,20 @@
  *     }
  * }
  */
+ //inorder traversal of bst gives sorted array
 class Solution {
-    int count=0;
-    int ans=-1;
     public int kthSmallest(TreeNode root, int k) {
-     inorder(root,k);
-     return ans;
-    }
-    public void inorder(TreeNode root,int k){
-        if(root==null) return;
+        List<Integer> list=new ArrayList<>();
+        inorder( root, list);
+        return list.get(k-1);
 
-        inorder(root.left,k);
-        count++;
-        if(count==k)
-         ans=root.val;
-        inorder(root.right,k);
+    }
+    public void inorder(TreeNode root, List<Integer> list){
+        if(root==null){
+            return;
+        }
+        inorder(root.left, list);
+        list.add(root.val);
+        inorder(root.right, list);
     }
 }
