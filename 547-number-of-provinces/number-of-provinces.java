@@ -1,12 +1,27 @@
 /*
 bfs
-w/o making the adjecency list
 using Queue
 */ 
+
 class Solution {
     public int findCircleNum(int[][] isConnected) {
         int n= isConnected.length;
         int[] visited=new int[n+1];
+
+        //making the adjecency list
+        ArrayList<Integer>[] adj=new ArrayList[n+1];
+        adj[0]=new ArrayList<>();
+        
+        for(int i=0;i<isConnected.length;i++){
+            adj[i+1]=new ArrayList<>();
+            int row=i;
+            for(int col=0;col<n;col++){
+                if(isConnected[row][col]==1){
+                    adj[row+1].add(col+1);
+                }
+            }
+        }
+       
 
         int ans=0;
         //0 : not visited, 1: visited
@@ -15,12 +30,12 @@ class Solution {
             if(visited[i]==0){
                 ans+=1;
                 visited[i]=1;
-                bfs(isConnected,visited,i);
+                bfs(adj,visited,i);
             }
         }
         return ans;
     }
-    public void bfs(int[][] isConnected, int[] visited, int src){
+    public void bfs(ArrayList<Integer>[] adj, int[] visited, int src){
         Queue<Integer> q=new LinkedList<>();
         q.add(src);
 
@@ -29,15 +44,13 @@ class Solution {
             // visited[city]=1;
 
             //visit its unvisited neighbours
-            for(int i=0;i<isConnected[0].length;i++){
-                int row=city-1;
-                int col=i;
-
-                if(isConnected[row][col]==1 && visited[col+1]==0){
-                    visited[col+1]=1;
-                    q.add(col+1);
+            for(int i=0;i<adj[city].size();i++){
+                if(visited[adj[city].get(i)]==0){
+                    visited[adj[city].get(i)]=1;
+                    q.add(adj[city].get(i));
                 }
             }
+            
         }
     }
 }
