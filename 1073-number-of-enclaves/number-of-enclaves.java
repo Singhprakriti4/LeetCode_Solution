@@ -1,58 +1,63 @@
 class Solution {
     public int numEnclaves(int[][] grid) {
+        int row=0;
+        for(int i=0;i<grid[0].length;i++){
+            if(grid[row][i]==1){
+                dfs(grid,row,i);
+            }
+        }
+
+        if(grid.length>1){
+            row=grid.length-1;
+            for(int i=0;i<grid[0].length;i++){
+            if(grid[row][i]==1){
+                dfs(grid,row,i);
+            }
+        }
+        }
+
+        int col=0;
+        for(int i=0;i<grid.length;i++ ){
+            if(grid[i][col]==1){
+                dfs(grid,i,col);
+            }
+        }
+
+        if(grid[0].length>1){
+            col=grid[0].length-1;
+             for(int i=0;i<grid.length;i++ ){
+            if(grid[i][col]==1){
+                dfs(grid,i,col);
+            }
+        }
+        }
 
         int ans=0;
-        Queue<int[]> q=new LinkedList<>();
-        
-        for(int i=0;i<grid.length;i++){
-         if(grid[i][0]==1){
-            grid[i][0]=0;
-            q.add(new int[]{i,0});
-         }
-         if(grid[i][grid[0].length-1]==1){
-            q.add(new int[]{i,grid[0].length-1});
-            grid[i][grid[0].length-1]=0;
-         }
-        }
-        for(int i=0;i<grid[0].length;i++){
-          if(grid[0][i]==1){
-            grid[0][i]=0;
-            q.add(new int[]{0,i});
-          }   
-          if(grid[grid.length-1][i]==1){
-            grid[grid.length-1][i]=0;
-            q.add(new int[]{grid.length-1,i});
-          }
-        }
-
-        int[] rowdiff={0,0,-1,1};
-        int[] coldiff={-1,1,0,0};
-
-       while(!q.isEmpty()){
-        int[] arr=q.poll();
-        int r=arr[0];
-        int c=arr[1];
-
-        for(int i=0;i<4;i++){
-            int row=r+rowdiff[i];
-            int col=c+coldiff[i];
-
-            if(row>=0 && row<grid.length && col>=0 && col<grid[0].length 
-             && grid[row][col]==1){
-                grid[row][col]=0;
-                q.add(new int[] {row,col});
-             }
-        }
-
-       }
-
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
                 if(grid[i][j]==1){
-                    ans++;
+                    ans+=1;
                 }
             }
         }
-        return ans;
+
+
+         return ans;
+    }
+    public void dfs(int[][] grid, int r, int c){
+        grid[r][c]=0;
+
+        int[] val1={0,0,1,-1};
+        int[] val2={1,-1,0,0};
+
+        for(int i=0;i<4;i++){
+            int row=r+val1[i];
+            int col=c+val2[i];
+
+            if(row>=0 && col>=0 && row<grid.length && col<grid[0].length
+            && grid[row][col]==1){
+                dfs(grid,row,col);
+            }
+        }
     }
 }
