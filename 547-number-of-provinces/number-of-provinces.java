@@ -8,7 +8,7 @@ class Solution {
         for(int i=0;i<n;i++){
             if(!visited[i]){
                 ans+=1;
-                visited[i]=true;
+                // visited[i]=true;
                 dfs(isConnected, visited, i);
             }
         }
@@ -18,9 +18,10 @@ class Solution {
     }
 
     public void dfs(int[][] isConnected, boolean[] visited, int src ){
+        visited[src]=true;
        for(int i=0;i<isConnected[src].length;i++){
         if(isConnected[src][i]==1 && !visited[i]){
-            visited[i]=true;
+            // visited[i]=true;
             dfs(isConnected, visited, i);
         }
        }
