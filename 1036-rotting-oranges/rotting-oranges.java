@@ -2,26 +2,23 @@
 class Solution {
     public int orangesRotting(int[][] grid) {
         int result=bfs(grid);
-
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[0].length;j++){
-                if(grid[i][j]==1){
-                    return -1;
-                }
-            }
-        }
-
         return result;
     }
 
     public int bfs(int[][] grid){
         Queue<int[]> q=new LinkedList<>();
+        int fresh=0;
+        int rotten=0;
 
         for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
                 if(grid[i][j]==2){
                     //rotten
+                    rotten+=1;
                     q.add(new int[]{i,j});
+                }
+                else if(grid[i][j]==1){
+                    fresh+=1;
                 }
             }
         }
@@ -53,6 +50,7 @@ class Solution {
 
                     if(row>=0 && col>=0 && row<grid.length && col<grid[0].length){
                         if(grid[row][col]==1){
+                            fresh-=1;
                             grid[row][col]=2;
                             q.add(new int[]{row, col});
                         }
@@ -61,6 +59,9 @@ class Solution {
             }
 
         }
+        if(fresh==0)
         return ans;
+
+        return -1;
     }
 }
