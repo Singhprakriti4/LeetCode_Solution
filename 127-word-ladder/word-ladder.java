@@ -1,70 +1,101 @@
 class Solution {
-    public int ladderLength(String begin, String end, List<String> wordlist) {
-        //if list!contains the beginword-> add it
+    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+
         boolean hasbegin=false;
         boolean hasend=false;
 
-        for(int i=0;i<wordlist.size();i++){
-            if(wordlist.get(i).equals(begin)){
-                hasbegin=true;
-            }
-            if(wordlist.get(i).equals(end)){
-                hasend=true;
-            }
+        for(int i=0;i<wordList.size();i++){
+            if(wordList.get(i).equals(beginWord)) hasbegin=true;
+            if(wordList.get(i).equals(endWord)) hasend=true;
         }
-        
-         System.out.println("hi");
-        if(!hasend) return 0;
-        
-        if(!hasbegin) wordlist.add(begin);
 
-    
-       Queue<String> q=new LinkedList<>();
-       Set<String> s=new HashSet<>();//this acts as visited array
-       int ans=1;
-
-       q.add(begin);
-       s.add(begin);
-       q.add(null);
-
-       while(!q.isEmpty()){
-       
-        String node=q.poll();
-
-        if(node==null){
-            ans+=1;
-
-           if(q.size()!=0){
-            q.add(null);
+        if(hasend==false){
+            return 0;
         }
-        continue;
-        }
-        //iterate on array and find the strings diffreng by 1
-    
-        for(int i=0;i<wordlist.size();i++){
-            String vertex=wordlist.get(i);
-            
 
-            if(!s.contains(vertex) && difference(node,vertex)==1){
-                //add the vertex in the list of node in adj
-                
-                if(vertex.equals(end)) return ans+1;
-                q.add(vertex);
-                s.add(vertex);
+        if(hasbegin==false){
+            wordList.add(beginWord);
+        }
+
+        HashMap<String,List<String>> adj=new HashMap<>();
+
+        for(int i=0;i<wordList.size();i++){            
+            for(int j=i+1;j<wordList.size();j++){
+                if(match(i,j, wordList)){
+                    if(adj.containsKey(wordList.get(i))){
+                        adj.get(wordList.get(i)).add(wordList.get(j));
+                    }
+                    else{
+                        List<String> list=new ArrayList<>();
+                        list.add(wordList.get(j));
+                        adj.put(wordList.get(i), list);
+                    }
+
+                    if(adj.containsKey(wordList.get(j))){
+                        adj.get(wordList.get(j)).add(wordList.get(i));
+                    }
+                    else{
+                        List<String> list=new ArrayList<>();
+                        list.add(wordList.get(i));
+                        adj.put(wordList.get(j),list);
+                    }
+                }
             }
         }
 
-       }
-   
-   return 0;
+        //print adj
+        // for(Map.Entry<String,List<String>> e: adj.entrySet()){
+        //     String k=e.getKey();
+        //     List<String> v=e.getValue();
 
+        //     System.out.print(k+": ");
+        //     for(int i=0;i<v.size();i++){
+        //         System.out.print(v.get(i)+" ");
+        //     }
+        //     System.out.println();
+        // }
+
+        HashMap<String, Integer> visited=new HashMap<>();
+        visited.put(beginWord,0);
+
+        Queue<String> q=new LinkedList<>();
+        q.add(beginWord);
+
+        while(!q.isEmpty()){
+            String word=q.poll();
+            //iterate on adj and non visited ones. if end found -> directly return
+            if(adj.containsKey(word)){
+            List<String> neighbours=adj.get(word);
+            for(int i=0;i<neighbours.size();i++){
+                if(!visited.containsKey(neighbours.get(i))){
+                    visited.put(neighbours.get(i), visited.get(word)+1);
+                    q.add(neighbours.get(i));
+                    if(neighbours.get(i).equals(endWord)){
+                        return visited.get(endWord)+1;
+                    }
+                }
+            }
+        }
+        }
+
+        return 0;
     }
-    public int difference(String a, String b){
-        int ans=0;
 
-        for(int i=0;i<a.length();i++){
-            if(a.charAt(i) != b.charAt(i)) ans++;
+    public boolean match(int i, int j, List<String> wordlist){
+        int diff=0;
+        String s1=wordlist.get(i);
+        String s2=wordlist.get(j);
+
+        if(s1.length()!=s2.length()) return false;
+
+        for(int k=0;k<s1.length();k++){
+            if(s1.charAt(k)!=s2.charAt(k)){
+                diff+=1;
+            }
         }
-        return ans;
+
+        if(diff==1) return true;
+
+        return false;
     }
 }
