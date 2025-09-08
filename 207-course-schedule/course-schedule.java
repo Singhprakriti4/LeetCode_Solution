@@ -1,49 +1,46 @@
 class Solution {
+
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-          boolean[] visited=new boolean[numCourses];
-          boolean[] currpath=new boolean[numCourses];
-          
-          ArrayList<Integer>[] adj=new ArrayList[numCourses];
+        
+        ArrayList<Integer>[] adj=new ArrayList[numCourses];
+        for(int i=0;i<adj.length;i++){
+            ArrayList<Integer> list=new ArrayList<>();
+            adj[i]=list;
+        }
 
-          for(int i=0;i<adj.length;i++){
-            adj[i]=new ArrayList<>();
-          }
+        for(int i=0;i<prerequisites.length;i++){
+            int from=prerequisites[i][1];
+            int to=prerequisites[i][0];
 
-          for(int i=0;i<prerequisites.length;i++){
-            adj[prerequisites[i][0]].add(prerequisites[i][1]);
-          }
+            adj[from].add(to);
+        }
 
-
-       
+        boolean[] visited=new boolean[numCourses];
+        boolean[] currpath=new boolean[numCourses];
         for(int i=0;i<visited.length;i++){
             if(!visited[i]){
-                if(dfs(i,adj,visited,currpath)){
-                    return false;
-                }
+                if(dfs(visited,currpath,adj,i,-1)) return false;
             }
         }
-     return true;
+
+        return true;
     }
-
-    boolean dfs(int node,ArrayList<Integer>[] adj,boolean[] visited, boolean
-    [] currentpath){
+    public boolean dfs(boolean[] visited,boolean[] currpath, ArrayList<Integer>[] adj,
+    int node, int parent){
         visited[node]=true;
-        currentpath[node]=true;
+        currpath[node]=true;
 
-        for(int e: adj[node])        {
-            if(!visited[e]){
-                if(dfs(e,adj,visited,currentpath)){
-                    return true;
-                }
+        for(int i=0;i<adj[node].size();i++){
+            int vertex=adj[node].get(i);
+            if(!visited[vertex]){
+                if(dfs(visited,currpath,adj,vertex,node)) return true;
             }
-            else{
-                if(currentpath[e]){
-                    return true;
-                }
+            else if(currpath[vertex]==true){
+                return true;
             }
         }
 
-        currentpath[node]=false;
+        currpath[node]=false;
         return false;
     }
 }
