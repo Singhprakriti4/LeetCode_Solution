@@ -1,42 +1,71 @@
 class Solution {
-    public int[] findOrder(int numCourses, int[][] prerequisites) {
-        //topological sort using bfs
-        //making adjecenty and calculating indegree
-        int[] indegree=new int[numCourses];
-        ArrayList<Integer>[] adj=new ArrayList[numCourses];
-        for(int i=0;i<adj.length;i++){
-            adj[i]=new ArrayList<>();
+    //detect cycle-> do topological sort
+    public int[] findOrder(int num, int[][] prerequisites) {
+
+        int[] result=new int[num];
+        int k=0;
+        ArrayList<Integer>[] adj=new ArrayList[num];
+        for(int i=0;i<num;i++){
+            ArrayList<Integer> list=new ArrayList<>();
+            adj[i]=list;
         }
+
         for(int i=0;i<prerequisites.length;i++){
-            indegree[prerequisites[i][0]]+=1;
-            adj[prerequisites[i][1]].add(prerequisites[i][0]);
+            
+            int a=prerequisites[i][0];
+            int b=prerequisites[i][1];
+            // System.out.println(a+" "+b);
+
+            adj[b].add(a);
         }
 
-        
-        int[] ans=new int[numCourses];
-        int ptr=-1;
-        Queue<Integer> q=new LinkedList<>();
+        // System.out.print("adj "+adj[1].get(0));
 
+        //detection of cycle in idrected graph -> bfs
+        //indegree
+        int[] indegree=new int[num];
+        for(int i=0;i<adj.length;i++){
+            for(int j=0;j<adj[i].size();j++){
+                indegree[adj[i].get(j)]+=1;
+            }
+        }
+        // indegree
+        // for(int i=0;i<num;i++){
+        //     System.out.print(indegree[i]+" ");
+        // }
+
+        Queue<Integer> q=new LinkedList<>();
         for(int i=0;i<indegree.length;i++){
             if(indegree[i]==0){
+                result[k++]=i;
                 q.add(i);
             }
         }
 
-       while(!q.isEmpty()){
-        int v=q.poll();
-        ans[++ptr]=v;
-        for(int e:adj[v]){
-            indegree[e]--;
-            if(indegree[e]==0){
-                q.add(e);
+        if(q.isEmpty()){
+            // System.out.println("hi");
+            return new int[]{};
+        }
+        while(!q.isEmpty()){
+            int node=q.poll();
+            for(int i=0;i<adj[node].size();i++){
+                int vertex=adj[node].get(i);
+                // if(indegree[vertex]<=0){
+                //     System.out.println(vertex);
+
+                //    return new int[]{};
+                // }
+                // else{
+                    indegree[vertex]-=1;
+                    if(indegree[vertex]==0){
+                        result[k++]=vertex;
+                        q.add(vertex);
+                    // }
+                       
+                }
             }
         }
-       }
-       if(ptr<ans.length-1){
-        return new int[]{};
-       }
-       return ans;
-        
+        if(k!=num) return new int[] {};
+        return result;
     }
 }
