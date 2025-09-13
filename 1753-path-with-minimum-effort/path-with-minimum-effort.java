@@ -1,52 +1,57 @@
-//custom class to store (node row, node col, cost to come here)
-class Triple implements Comparable<Triple>{
+class Pair implements Comparable<Pair>{
     int r;
     int c;
-    int wt;
+    int w;
 
-    Triple(int r,int c, int wt){
+    public Pair(int r, int c, int w){
         this.r=r;
         this.c=c;
-        this.wt=wt;
+        this.w=w;
     }
 
-    public int compareTo(Triple that){
-        return this.wt-that.wt;
+    public int compareTo(Pair that){
+        return this.w-that.w;
     }
-    
 }
 class Solution {
     public int minimumEffortPath(int[][] heights) {
-        int m=heights.length;
-        int n=heights[0].length;
 
-        boolean[][] visited=new boolean[m][n];
-        PriorityQueue<Triple> q=new PriorityQueue<>();
-        q.add(new Triple(0,0,0));
+      int[][] dist=new int[heights.length][heights[0].length];
+      for(int i=0;i<heights.length;i++){
+        Arrays.fill(dist[i],-1);
+      }
 
-        while(!q.isEmpty()){
-            Triple t=q.poll();
-            int row=t.r;
-            int col=t.c;
-            if(row==m-1 && col==n-1){
-                return t.wt;
+      PriorityQueue<Pair> q=new PriorityQueue<>();
+      q.add(new Pair(0,0,0));
+      dist[0][0]=0;
+
+      while(!q.isEmpty()){
+        Pair p=q.poll();
+
+        int r=p.r;
+        int c=p.c;
+        int wt=p.w;
+
+        // if(dist[r][c]!=-1 && dist[r][c]<wt){
+        //     continue;
+        // }
+
+        int[] val1={1,-1,0,0};
+        int[] val2={0,0,-1,1};
+
+        for(int i=0;i<4;i++){
+            int row=val1[i]+r;
+            int col=val2[i]+c;
+
+            if(row>=0 && row<heights.length && col>=0 && col<heights[0].length
+            && (dist[row][col]==-1 || dist[row][col] > Math.max(wt,(Math.abs(heights[r][c]-heights[row][col])) ))){
+
+                dist[row][col]=Math.max(wt,Math.abs(heights[r][c]-heights[row][col]) );
+                q.add(new Pair(row,col,dist[row][col]));
+
             }
-            if(visited[row][col]){continue;}
-
-            visited[row][col]=true;
-            int[] rowadd={0,0,1,-1};
-            int[] coladd={1,-1,0,0};
-
-            for(int i=0;i<4;i++){
-                int currr=row+rowadd[i];
-                int currc=col+coladd[i];
-
-                if(currr>=0 && currr<m && currc>=0 && currc<n && !visited[currr][currc]){
-                 q.add(new Triple(currr,currc,Math.max(Math.abs(heights[currr][currc] - heights[row][col]),t.wt)));
-                }
-            }
-
         }
-        return -1;
+      }
+      return dist[heights.length-1][heights[0].length-1];
     }
 }
