@@ -31,6 +31,10 @@ class Solution {
         int r=p.r;
         int c=p.c;
         int wt=p.w;
+        
+        if(r==heights.length-1 && c==heights[0].length-1){
+            return wt;
+        }
 
         if(dist[r][c]!=-1 && dist[r][c]<wt){
             continue;
