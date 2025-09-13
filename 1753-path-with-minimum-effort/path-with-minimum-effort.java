@@ -32,9 +32,9 @@ class Solution {
         int c=p.c;
         int wt=p.w;
 
-        // if(dist[r][c]!=-1 && dist[r][c]<wt){
-        //     continue;
-        // }
+        if(dist[r][c]!=-1 && dist[r][c]<wt){
+            continue;
+        }
 
         int[] val1={1,-1,0,0};
         int[] val2={0,0,-1,1};
