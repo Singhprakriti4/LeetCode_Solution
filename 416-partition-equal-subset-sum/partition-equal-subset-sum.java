@@ -11,13 +11,14 @@ class Solution {
 
         return ans(nums,sum/2,nums.length-1,dp);
 
+
+
     }
     public boolean ans(int[] nums, int sum, int idx, int[][] dp){
-
-        if(idx==-1){
-            if(sum==0){
+        if(sum==0){
                 return true;
             }
+        if(idx==-1){
             return false;
         }
         
