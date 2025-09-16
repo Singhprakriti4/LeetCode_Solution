@@ -1,41 +1,45 @@
 class Solution {
     public boolean canPartition(int[] nums) {
-        int total=0;
-        for(int i=0;i<nums.length;i++){
-            total+=nums[i];
-        }
-        if(total%2!=0){
-            return false;
-        }
-        int sum=total/2;
-        //0>none
-        //1> true
-        //2> false
-
-        int[][] dp=new int[nums.length][sum+1];
-        return find(nums,0,0,sum,dp);
-    }
-    public boolean find(int[] nums,int idx, int curr, int sum,int[][] dp){
-        if(idx==nums.length && curr==sum){
-            return true;
-        }
-        if(idx==nums.length && curr!=sum){
-            return false;
-        }
-        if(curr>sum) return false;
         
-        if(dp[idx][curr]!=0){ 
-            if(dp[idx][curr]==1) return true;
-            if(dp[idx][curr]==2) return false;
+        int sum=0;
+        for(int i=0;i<nums.length;i++){
+            sum+=nums[i];
         }
-        //choice either put in sum1 or in sum2
-        boolean f= find(nums,idx+1,curr+nums[idx],sum,dp);
-        boolean s= find(nums,idx+1,curr,sum,dp);
+        if(sum%2!=0) return false;
 
-        boolean res= f||s;
-        if(res==true) dp[idx][curr]=1;
-        else dp[idx][curr]=2;
+        int[][] dp=new int[sum+1][nums.length+1];
 
+        return ans(nums,sum/2,nums.length-1,dp);
+
+    }
+    public boolean ans(int[] nums, int sum, int idx, int[][] dp){
+
+        if(idx==-1){
+            if(sum==0){
+                return true;
+            }
+            return false;
+        }
+        
+        if(dp[sum][idx+1]!=0){
+            if(dp[sum][idx+1]==1) return true;
+            return false;
+        }
+
+        boolean  res =false;
+        if(nums[idx]<=sum){
+         res= ans(nums,sum-nums[idx],idx-1,dp) ||
+               ans(nums,sum,idx-1,dp);
+        }
+        else{
+            res=ans(nums,sum,idx-1,dp);
+        }
+
+        if(res){ dp[sum][idx+1]=1;
+        }
+        else{
+            dp[sum][idx+1]=2;
+        }
         return res;
     }
-}
+} 
