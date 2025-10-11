@@ -14,44 +14,24 @@
  * }
  */
 class Solution {
+    int ans_final=Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {
-        int[] max=new int[1];
-        max[0]=Integer.MIN_VALUE;
-        int ans= helper(root,max);
-
-       return Math.max(ans,max[0]);
+        ans(root);
+        return ans_final;
     }
-    public int helper(TreeNode root, int[] max){
+    public int ans(TreeNode root){
         if(root==null){
-            return Integer.MIN_VALUE;
+            return 0;
         }
+        int left=ans(root.left);
+        int right=ans(root.right);
 
-        int left=helper(root.left,max);
-        int right=helper(root.right,max);
-        int all3=root.val;
-        if(left!=Integer.MIN_VALUE){
-            all3+=left;
-        }
-        if(right!=Integer.MIN_VALUE){
-            all3+=right;
-        }
+        //ans nahi mila(aage pass krna hai)
+        // int badivalue=Math.max(left,right);
+        int temp=Math.max(root.val,Math.max(left,right)+root.val);
 
-        max[0]=Math.max(max[0],Math.max(left,Math.max(right, all3)));
-        
-        int currmax=0;
-        
-        if(left!=Integer.MIN_VALUE && right!=Integer.MIN_VALUE){
-           currmax= Math.max(root.val+left, Math.max(root.val+right,root.val));
-        }
-        else if(right!=Integer.MIN_VALUE && left==Integer.MIN_VALUE){
-            currmax=Math.max(root.val,root.val+right);
-        }
-        else if(right==Integer.MIN_VALUE && left!=Integer.MIN_VALUE){
-            currmax=Math.max(root.val,root.val+left);
-        }
-        else{
-            currmax= root.val ;
-        }
-       return currmax;
+        //ans mil gyaa hai i.e. root hi an ska bhi root hai
+        ans_final=Math.max(temp,Math.max(ans_final,left+right+root.val));
+        return temp;
     }
 }
