@@ -1,36 +1,43 @@
 class Solution {
     public int[] searchRange(int[] nums, int target) {
-        int[] ans= {-1,-1};
-        ans[0]=binary(nums,target,true);
-        if(ans[0]!=-1){
-            ans[1]=binary(nums,target, false);
-        }
-        return ans;
+       //first
+       int s=0;
+       int e=nums.length-1;
+       int ansbeg=-1;
+       int ansend=-1;
 
-    }
-    int binary(int[] nums,int target, boolean starting){
-        int ans=-1;
-        int start=0;
-        int end=nums.length-1;
-        while(start<=end){
-            int mid=start+(end-start)/2;
-            if(nums[mid]>target){
-                end=mid-1;
-            }
-            else if(nums[mid]<target){
-                start=mid+1;
-            }
-            else{
-                if(starting){
-                  ans=mid;
-                  end=mid-1;
-                }
-                else{
-                    ans=mid;
-                    start=mid+1;
-                }
-            }
+       while(s<=e){
+        int m=s+(e-s)/2;
+        if(nums[m]==target){
+            ansbeg=m;
+            e=m-1;
         }
-        return ans;
+        else if(nums[m]>target){
+            e=m-1;
+        }
+        else{
+            s=m+1;
+        }
+       } 
+
+       //ending index
+       s=0;
+       e=nums.length-1;
+
+       while(s<=e){
+        int m=s+(e-s)/2;
+        if(nums[m]==target){
+            ansend=m;
+            s=m+1;
+        }
+        else if(nums[m]>target){
+            e=m-1;
+        }
+        else{
+            s=m+1;
+        }
+       }
+
+       return new int[]{ansbeg, ansend};
     }
 }
