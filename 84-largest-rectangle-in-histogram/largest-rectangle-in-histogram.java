@@ -1,52 +1,38 @@
 class Solution {
     public int largestRectangleArea(int[] heights) {
-        int[] pre_small=new int[heights.length];
-        int[] post_small=new int[heights.length];
-        pre_small=psi(heights,pre_small);
-        post_small=nsi(heights,post_small);
-        int max_area=-1;
-        for(int i=0;i<heights.length;i++){
-            int area=heights[i]*(post_small[i]-pre_small[i]-1);
-            if(area>max_area){
-                max_area=area;
-            }
-        }
-        return max_area;
-    }
-    public int[] psi(int[] heights,int[] ans){
+        //har block bina apneaap ko bina shrink kre kitna extend kr skta hai
+        //we will get each height ke according answer
+
+        //next smaller aur previous smaller ki indexes mil jaye toh job done
+        int[] nextsmaller=new int[heights.length];
+        Arrays.fill(nextsmaller, heights.length);//for those who donot have a next smaller(the tallest one and last one)
+        
         Stack<Integer> stk=new Stack<>();
-        int k=0;
         for(int i=0;i<heights.length;i++){
-              while(!stk.isEmpty() && heights[stk.peek()]>=heights[i]){
-                   stk.pop();
-              }
-              if(stk.isEmpty()){
-                ans[k]=-1;
-              }
-              else{
-                ans[k]=stk.peek();
-              }
-              stk.push(i);
-              k++;
+            while(!stk.isEmpty() && heights[i]<heights[stk.peek()]){
+                nextsmaller[stk.pop()]=i;
+            }
+            stk.push(i);
         }
-        return ans;
-    }
-    public int[] nsi(int[] heights,int[] ans){
-         Stack<Integer> stk=new Stack<>();
-         int k=ans.length-1;
+
+        stk=new Stack<>();
+        int[] prevsmaller=new int[heights.length];
+        Arrays.fill(prevsmaller, -1);//for the ones with no prev smaller(eg: the first elemnt and the tallest one)
+
         for(int i=heights.length-1;i>=0;i--){
-              while(!stk.isEmpty() && heights[stk.peek()]>=heights[i]){
-                   stk.pop();
-              }
-              if(stk.isEmpty()){
-                ans[k]=heights.length;
-              }
-              else{
-                ans[k]=stk.peek();
-              }
-              stk.push(i);
-              k--;
+            while(!stk.isEmpty() && heights[i]<heights[stk.peek()]){
+                prevsmaller[stk.pop()]=i;
+            }
+            stk.push(i);
         }
-        return ans;
+       
+       int maxarea=0;
+       for(int i=0;i<heights.length;i++){
+        int width=nextsmaller[i]-prevsmaller[i]-1;
+        int height=heights[i];
+        int localarea=width*height;
+        maxarea=Math.max(maxarea, localarea);
+       }
+      return maxarea;
     }
 }
