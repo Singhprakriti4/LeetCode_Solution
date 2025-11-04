@@ -1,36 +1,46 @@
 class Solution {
     public int numberOfSubarrays(int[] nums, int k) {
+        int ans=0;
+        int currcount=0;
+        int oddnums=0;
+        int left=0;
 
-    HashMap<Integer, Integer> map=new HashMap<>();
-    int currodds=0;
-    int ans=0;
+        for(int right=0;right<nums.length;right++){
+            if(nums[right]%2==1){
+                oddnums+=1;
+            }
+            if(oddnums<k){
+                //move forward
+                continue;
+            }
+            else if(oddnums==k){
 
-    for(int i=0;i<nums.length;i++){
+                while(nums[left]%2==0){
+                    currcount+=1;
+                    left++;
+                }
 
-        if(nums[i]%2==1){
-            currodds+=1;
-        }
+                ans+=currcount+1;
 
-        if(currodds==k){
-            ans+=1;
-            if(map.containsKey(0)){
-                ans+=map.get(0);
+            }
+            else{
+                currcount=0;
+               while(oddnums>k){
+                if(nums[left]%2==1){
+                    oddnums-=1;
+                }
+                left++;
+               }
+               //now it is equal so run this for that
+
+              while(nums[left]%2==0){
+                    currcount+=1;
+                    left++;
+                }
+
+                ans+=currcount+1;
             }
         }
-
-            if(currodds>k && map.containsKey(currodds-k)){
-                ans+=map.get(currodds-k);
-            }
-        
-         map.put(currodds,map.getOrDefault(currodds,0)+1);
+        return ans;
     }
-    
-    // for(Map.Entry<Integer,Integer> e: map.entrySet()){
-    //     System.out.println(e.getKey()+": "+e.getValue());
-    // }
-
-    return ans;
-
-
-    }
-} 
+}
