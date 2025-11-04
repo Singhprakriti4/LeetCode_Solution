@@ -21,22 +21,32 @@ class Solution {
         char c=s.charAt(right);
         if(set.contains(c)){
             currfreq.put(c,currfreq.getOrDefault(c,0)+1);
+            String test="teststring";
+            if(check(level,currfreq, set)){
+                test=t;
 
-                while(check(level, currfreq, set)){
-
+                while(test.equals(t)){
+                    
                     if(right-left+1<len){
                     ans=s.substring(left,right+1);
                     len=right-left+1;
                     }
+                    
                     //we will try to find the shortest length
-                    if(currfreq.containsKey(s.charAt(left))){
+                    if(set.contains(s.charAt(left))){
                         currfreq.put(s.charAt(left),currfreq.get(s.charAt(left))-1);
-                        if(currfreq.get(s.charAt(left))==0){
+                        int freq=currfreq.get(s.charAt(left));
+                        if(freq==0){
                             currfreq.remove(s.charAt(left));
+                            test="teststring";
+                        }
+                        if(freq<level.get(s.charAt(left))){
+                            test="teststring";
                         }
                     }
                     left++;
                 }
+            }
             
         }
        }
