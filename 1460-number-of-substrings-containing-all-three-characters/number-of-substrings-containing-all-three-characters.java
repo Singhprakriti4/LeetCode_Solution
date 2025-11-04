@@ -1,55 +1,53 @@
 class Solution {
     public int numberOfSubstrings(String s) {
-        int n=s.length();
         int ans=0;
-        int i=0;
-        int j=0;
-        int a=0;
-        int b=0;
-        int c=0;
 
-        while(j<n && (a==0 || b==0 || c==0)){
-            if(s.charAt(j)=='a')a++;
-            if(s.charAt(j)=='b')b++;
-            if(s.charAt(j)=='c')c++;
-            j++;
-        }
-        j--;
+        int currcount=0;
 
-           System.out.println(j);
-        //    System.out.println(a);
-        //    System.out.println(b);
-        //    System.out.println(c);
-        if(a==0 || b==0 || c==0){
-            // System.out.println("ji");
-            return ans;
-        }
+        int left=0;
+        int[] freq=new int[3];
+        //0: a, 1:b, 2:c
 
+        for(int right=0;right<s.length();right++){
 
-        //consider only aage ke substrings 
-        while(j<n && i<n){
-
-           if(a!=0 && b!=0 && c!=0){
-            ans+=n-j;
-
-            if(s.charAt(i)=='a') a--;
-            if(s.charAt(i)=='b') b--;
-            if(s.charAt(i)=='c') c--;
-            i++;
+            char c=s.charAt(right);
             
-           }
-           else{
-            //only j will be moved
-            j++;
-            if(j<n){
-            if(s.charAt(j)=='a')a++;
-            if(s.charAt(j)=='b')b++;
-            if(s.charAt(j)=='c')c++;
+            if(c=='a' || c=='b' || c=='c'){
+                freq[c-'a']+=1;
             }
+
+                if(freq[0]==0 || freq[1]==0 || freq[2]==0){
+                    //condition not met;
+                    currcount=0;
+                }
+                else{
+                    //condiiton is met
+                    //pichle currme add krna hai
+                    while(freq[0]>0 && freq[1]>0 && freq[2]>0){
+                        //loop till condition is valid
+                        char test=s.charAt(left);
+
+                        if(test=='a'){
+                            if(freq[0]-1==0) break;
+                            freq[0]-=1;
+                        }
+                        if(test=='b'){
+                           if( freq[1]-1==0) break;
+                           freq[1]-=1;
+                        }
+                        if(test=='c'){
+                           if( freq[2]-1==0) break;
+                           freq[2]-=1;
+                        }
+                        left+=1;
+                        currcount+=1;
+                    }
+
+                    ans+=currcount+1;
+
+                }
             
-           }
         }
-        
         return ans;
     }
 }
