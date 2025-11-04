@@ -10,30 +10,22 @@ class Solution {
 
         int ans=0;
         int left=0;
-        int right=0;
 
         Map<Integer, Integer> map=new HashMap<>();// nums[i], frequency ( in the curr window)
 
-        while(right<nums.length){
-            //add the curr new value in the map
-            map.put(nums[right], map.getOrDefault(nums[right],0)+1);
+        for(int right=0; right< nums.length; right++){
 
-            if(map.size()<=k){
-                //condition met
-                ans+=right-left+1;// no of subararys in the current window ending at right that have distinck elements <=k
-                right++;
-            }
-            else{
-                //shrink the window to meet the condition
+            map.put(nums[right], map.getOrDefault(nums[right], 0)+1);
+
+            //if the no of distinct nums are >k
+            while(map.size()>k){
                 map.put(nums[left],map.get(nums[left])-1);
-                if(map.get(nums[left])==0){
-                    map.remove(nums[left]);
-                }
+                if(map.get(nums[left])==0) map.remove(nums[left]);
 
                 left++;
-                // if(map.containsKey(nums[right]))
-                map.put(nums[right], map.get(nums[right])-1);//since right value will be added by default in the next iteration
             }
+
+            ans+=right-left+1;
         }
         return ans;
     }
