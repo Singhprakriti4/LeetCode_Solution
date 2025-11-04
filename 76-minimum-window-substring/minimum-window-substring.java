@@ -1,65 +1,60 @@
 class Solution {
     public String minWindow(String s, String t) {
-       if(t.length()>s.length()) {
+
+        if(t.length()>s.length()) {
         return "";
        }
-       int len=Integer.MAX_VALUE;
-       String ans="";
 
-       HashMap<Character, Integer> level=new HashMap<>();
-       Set<Character> set=new HashSet<>();
+        int length=Integer.MAX_VALUE;
+        String ans="";
+        // System.out.println(s.length());
+        // System.out.println(t.length());
 
-       for(int i=0;i<t.length();i++){
-        level.put(t.charAt(i), level.getOrDefault(t.charAt(i), 0)+1);
-        set.add(t.charAt(i));
-       }
+        Map<Character, Integer> need=new HashMap<>();
 
-       int left=0;
-       HashMap<Character, Integer> currfreq=new HashMap<>();
-       for(int right=0;right<s.length();right++){
+        for(int i=0;i<t.length();i++){
+            need.put(t.charAt(i), need.getOrDefault(t.charAt(i),0)+1);
+        }
+        // System.out.println(need.size());
 
-        char c=s.charAt(right);
-        if(set.contains(c)){
-            currfreq.put(c,currfreq.getOrDefault(c,0)+1);
-            String test="teststring";
-            if(check(level,currfreq, set)){
-                test=t;
+        int found=0;
 
-                while(test.equals(t)){
-                    
-                    if(right-left+1<len){
-                    ans=s.substring(left,right+1);
-                    len=right-left+1;
-                    }
-                    
-                    //we will try to find the shortest length
-                    if(set.contains(s.charAt(left))){
-                        currfreq.put(s.charAt(left),currfreq.get(s.charAt(left))-1);
-                        int freq=currfreq.get(s.charAt(left));
-                        if(freq==0){
-                            currfreq.remove(s.charAt(left));
-                            test="teststring";
-                        }
-                        if(freq<level.get(s.charAt(left))){
-                            test="teststring";
-                        }
-                    }
-                    left++;
-                }
+        Map<Character, Integer> currcount=new HashMap<>();
+        int left=0;
+
+        for(int right=0;right<s.length();right++){
+         
+            char currchar=s.charAt(right);
+
+            currcount.put(currchar, currcount.getOrDefault(currchar,0)+1);
+
+            if(need.containsKey(currchar) && currcount.get(currchar).equals(need.get(currchar))){
+                found+=1;
+                System.out.println(found);
             }
-            
-        }
-       }
-       return ans;
-    }
-    public boolean check(HashMap<Character, Integer> level,
-    HashMap<Character, Integer> currfreq, Set<Character> set){
 
-        if(currfreq.size()<set.size()) return false;
+            while(found==need.size()){
+                // System.out.println("hi");
+                if(right-left+1<=length){
+                    ans=s.substring(left, right+1);
+                    length=right-left+1;
+                }
 
-        for(Map.Entry<Character, Integer> e: level.entrySet()){
-            if(currfreq.get(e.getKey())<e.getValue()) return false;
+                char totest=s.charAt(left);
+
+                if(need.containsKey(totest)){
+
+                    currcount.put(totest, currcount.get(totest)-1);
+                    //update the currcount and found if necessary
+
+                    if(currcount.get(totest)<need.get(totest)){
+                        found-=1;
+                    }
+                }
+
+                left++;
+            }
         }
-        return true;
+        return ans;
     }
 }
