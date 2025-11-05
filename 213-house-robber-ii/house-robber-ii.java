@@ -1,42 +1,32 @@
 class Solution {
-    //0-> true
-    //1-> false
-
     public int rob(int[] nums) {
         if(nums.length==1){
             return nums[0];
         }
-        int[][] dp=new int[nums.length][2];
-        for(int i=0;i<dp.length;i++)
-        Arrays.fill(dp[i],-1);
-        return profit(nums, false, nums.length-1, dp);
-    }
-    public int profit(int[] nums, boolean first, int curr, int[][] dp){
-        if(curr<0){
-            return 0;
+        if(nums.length==2){
+            return Math.max(nums[0],nums[1]);
         }
-        int j=0;
-        if(!first) j=1;
-        if(dp[curr][j]!=-1){
-            return dp[curr][j];
-        }
-        if(curr==0){
-            if(first){
-                //if the first one was taken , can't take this one
-                return dp[curr][j]=profit(nums, true, curr-1,dp);
-            }
-            else{
-                return dp[curr][j]=Math.max(nums[curr]+profit(nums,true,curr-2,dp),
-                                profit(nums, true, curr-1, dp));
-            }
+        //make two dps : with taking one and without taking one and choose the most one
+
+        int[] dptrue=new int[nums.length];//go only till length-2
+        int[] dpfalse=new int[nums.length];// start with the second index and go till last
+
+        dptrue[0]=nums[0];//took the first element
+        dptrue[1]=Math.max(nums[0],nums[1]);
+        for(int i=2;i<nums.length-1;i++){
+            dptrue[i]=Math.max(dptrue[i-2]+nums[i], dptrue[i-1]);
         }
 
-        if(curr==nums.length-1){
-            return dp[curr][j]=Math.max(nums[curr]+profit(nums, true, curr-2, dp),
-            profit(nums,false, curr-1, dp));
+        int ans1=dptrue[nums.length-2];
+
+        dpfalse[0]=0;//not considering the first one
+        dpfalse[1]=nums[1];
+        for(int i=2;i<nums.length;i++){
+            dpfalse[i]=Math.max(dpfalse[i-2]+nums[i], dpfalse[i-1]);
         }
 
-        return dp[curr][j]=Math.max(nums[curr]+profit(nums, first, curr-2, dp),
-                       profit(nums, first, curr-1, dp));
+        int ans2=dpfalse[nums.length-1];
+
+        return Math.max(ans1,ans2);
     }
 }
