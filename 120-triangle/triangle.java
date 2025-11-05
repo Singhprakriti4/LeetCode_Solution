@@ -1,27 +1,20 @@
 class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
         int m=triangle.size();
-        
         int[][] dp=new int[m][m];
+
         for(int i=0;i<m;i++){
-            Arrays.fill(dp[i],Integer.MIN_VALUE);
+            //keeping last row as teh same
+            dp[m-1][i]=triangle.get(m-1).get(i);
         }
 
-        return minval(triangle, m, 0, 0, dp);
-    }
-    public int minval(List<List<Integer>> triangle, int m, int r, int c, int[][] dp){
-        if(r==m-1){
-            //reached the last row
-            return triangle.get(r).get(c);
+        for(int row=m-2;row>=0;row--){
+            // int k=row;
+            for(int col=row;col>=0;col--){
+                dp[row][col]=Math.min(dp[row+1][col],dp[row+1][col+1])+triangle.get(row).get(col);
+            }
         }
 
-        if(dp[r][c]!=Integer.MIN_VALUE){
-            return dp[r][c];
-        }
-
-        int path1=triangle.get(r).get(c)+minval(triangle, m, r+1, c, dp);
-        int path2=triangle.get(r).get(c)+minval(triangle, m, r+1, c+1, dp);
-
-        return dp[r][c]=Math.min(path1, path2);
+        return dp[0][0];
     }
 }
