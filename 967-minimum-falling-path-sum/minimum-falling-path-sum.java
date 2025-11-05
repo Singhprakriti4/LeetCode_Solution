@@ -4,10 +4,11 @@ class Solution {
         int m=matrix.length;
         int n=matrix[0].length;
 
-        for(int i=0;i<n;i++){
-            int[][] dp=new int[m][n];
+         int[][] dp=new int[m][n];
             for(int j=0;j<m;j++)
             Arrays.fill(dp[j],Integer.MAX_VALUE);
+
+        for(int i=0;i<n;i++){
 
             ans=Math.min(ans,minpathsum(matrix,m,n,0,i,dp));
         }
