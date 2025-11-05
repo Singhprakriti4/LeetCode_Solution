@@ -2,16 +2,19 @@ class Solution {
     public int rob(int[] nums) {
         int[] dp=new int[nums.length];
         Arrays.fill(dp,-1);
-        return rob(nums,0,dp);
+        return profit(nums, nums.length-1,dp);
     }
-    public int rob(int[] nums,int index,int[] dp){
-        if(index>=nums.length){
+    public int profit(int[] nums, int curr, int[] dp){
+        if(curr<0){
             return 0;
         }
-        if(dp[index]!=-1) return dp[index];
-        dp[index]=Math.max(nums[index]+rob(nums,index+2,dp),
-        rob(nums,index+1,dp));
 
-        return dp[index];
+        if(dp[curr]!=-1){
+            return dp[curr];
+        }
+       
+        return dp[curr]= Math.max(nums[curr]+profit(nums,curr-2,dp),
+                        profit(nums,curr-1,dp));
+        //maximum of choosing to rob the curr house or not
     }
 }
