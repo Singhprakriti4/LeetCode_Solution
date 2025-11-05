@@ -1,41 +1,40 @@
 class Solution {
     public int minFallingPathSum(int[][] matrix) {
-        int ans=Integer.MAX_VALUE;
+        
         int m=matrix.length;
         int n=matrix[0].length;
 
-         int[][] dp=new int[m][n];
-            for(int j=0;j<m;j++)
-            Arrays.fill(dp[j],Integer.MAX_VALUE);
-
-        for(int i=0;i<n;i++){
-
-            ans=Math.min(ans,minpathsum(matrix,m,n,0,i,dp));
+        int[][] dp=new int[m][n+2];
+        for(int i=0;i<m;i++){
+            dp[i][0]=Integer.MAX_VALUE;
+            dp[i][n+1]=Integer.MAX_VALUE;
         }
 
-        return ans;
-    }
-    public int minpathsum(int[][] matrix, int m, int n, int r, int c, int[][] dp){
-        if(r==m-1){
-            //reached the last row
-            return matrix[r][c];
+        //column same;
+        //row is reduced by 1
+
+        for(int i=1;i<=n;i++){
+            dp[m-1][i]=matrix[m-1][i-1];
+        }
+        // for(int i=0;i<m;i++){
+        //     for(int j=0;j<n+2;j++){
+        //         System.out.print(dp[i][j]+" ");
+        //     }
+        //     System.out.println();
+        // }
+
+        for(int row=m-2;row>=0;row--){
+            for(int col=1;col<=n;col++){
+                dp[row][col]=Math.min(dp[row+1][col],Math.min(dp[row+1][col+1],dp[row+1][col-1]))+matrix[row][col-1];
+            }
         }
 
-        if(dp[r][c]!=Integer.MAX_VALUE){
-            return dp[r][c];
+        int result=Integer.MAX_VALUE;
+
+        for(int i=1;i<=n;i++){
+            result=Math.min(result, dp[0][i]);
         }
 
-        int ans=Integer.MAX_VALUE;
-        if(r+1<m ){
-            ans=Math.min(ans, matrix[r][c]+minpathsum(matrix,m,n,r+1,c,dp));//down
-        }
-        if(r+1<m && c+1<n){
-            ans=Math.min(ans, matrix[r][c]+minpathsum(matrix,m,n,r+1,c+1,dp));//diagonally right
-        }
-        if(r+1<m && c-1>=0){
-            ans=Math.min(ans, matrix[r][c]+minpathsum(matrix,m,n,r+1,c-1,dp));//diagonally left
-        }
-
-        return dp[r][c]=ans;
+        return result;
     }
 }
