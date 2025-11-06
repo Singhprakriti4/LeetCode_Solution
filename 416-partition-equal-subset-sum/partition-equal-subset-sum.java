@@ -10,39 +10,31 @@ class Solution {
             return false;
         }
 
-        int[][] dp=new int[nums.length][(totalsum/2)+1];
-        for(int i=0;i<nums.length;i++)
-        Arrays.fill(dp[i],-1);
-        //0->false
-        //1->true
-        return equalsum(nums,0,totalsum/2,dp);
-    }
-    public boolean equalsum(int[] nums,int i,int sum, int[][] dp){
-        if(sum==0){
-            return true;
+        int[][] dp=new int[nums.length+1][(totalsum/2)+1];
+
+
+
+        for(int i=0;i<dp.length;i++){
+            dp[i][0]=1;//when sum==0 return true;
         }
-        if(sum<0){
-            return false;
+        for(int i=1;i<dp[0].length;i++){
+            dp[nums.length][i]=0;//false when we reach the last index and our sum is still not equal to 0
         }
-        if(i==nums.length){
-            return sum==0;
-        }
-        if(dp[i][sum]!=-1){
-            if(dp[i][sum]==0){
-                return false;
+
+        for(int row=nums.length-1;row>=0;row--){
+            //starting from the last index(valid)
+            for(int col=1;col<dp[0].length;col++){
+                //
+                if(col-nums[row]<0){
+                    dp[row][col]=dp[row+1][col];//without considering current nums[i]
+                }
+                else{
+                    dp[row][col]=Math.max(dp[row+1][col], dp[row+1][col-nums[row]]);
+                }
             }
-            return true;
         }
 
-        boolean ans=equalsum(nums, i+1, sum-nums[i], dp) || equalsum(nums, i+1, sum, dp);
-        if(ans){
-             dp[i][sum]=1;
-        }
-        else{
-            dp[i][sum]=0;
-        }
-
-        return ans;
+        return dp[0][totalsum/2]==1;
 
     }
 }
