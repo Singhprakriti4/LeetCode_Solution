@@ -1,29 +1,48 @@
 class Solution {
+    //intuition: every element can be put either in set1 or in set 2
     public boolean canPartition(int[] nums) {
-        int sum=0;
+        int totalsum=0;
         for(int i=0;i<nums.length;i++){
-            sum+=nums[i];
+            totalsum+=nums[i];
         }
-        if(sum%2!=0) return false;
-        
-        //base case-> initialisation
-
-        boolean[][] dp=new boolean[sum/2+1][nums.length+1];
-        for(int i=0;i<dp[0].length;i++){
-            dp[0][i]=true;
+        if(totalsum%2==1){
+            //odd number cannot be partitioned into 2
+            return false;
         }
 
-        for(int s=1;s<dp.length;s++){
-            for(int i=1;i<dp[0].length;i++){
-                if(nums[i-1]<=s){
-                    dp[s][i]=dp[s-nums[i-1]][i-1]|| dp[s][i-1];
-                }
-                else{
-                    dp[s][i]=dp[s][i-1];
-                }
+        int[][] dp=new int[nums.length][(totalsum/2)+1];
+        for(int i=0;i<nums.length;i++)
+        Arrays.fill(dp[i],-1);
+        //0->false
+        //1->true
+        return equalsum(nums,0,totalsum/2,dp);
+    }
+    public boolean equalsum(int[] nums,int i,int sum, int[][] dp){
+        if(sum==0){
+            return true;
+        }
+        if(sum<0){
+            return false;
+        }
+        if(i==nums.length){
+            return sum==0;
+        }
+        if(dp[i][sum]!=-1){
+            if(dp[i][sum]==0){
+                return false;
             }
+            return true;
         }
 
-        return dp[sum/2][nums.length];
+        boolean ans=equalsum(nums, i+1, sum-nums[i], dp) || equalsum(nums, i+1, sum, dp);
+        if(ans){
+             dp[i][sum]=1;
+        }
+        else{
+            dp[i][sum]=0;
+        }
+
+        return ans;
+
     }
 }
