@@ -18,21 +18,21 @@ class Solution {
 
         // return profit(prices, fee, 0, false);
     }
-    public int profit(int[] prices, int fee, int idx, boolean bought){
-        if(idx==prices.length){
-            return 0;
-        }
+    // public int profit(int[] prices, int fee, int idx, boolean bought){
+    //     if(idx==prices.length){
+    //         return 0;
+    //     }
 
-        if(!bought){
-            int buynow=-prices[idx]+profit(prices, fee, idx+1, true);
-            int notbuy=profit(prices, fee, idx+1, false);
+    //     if(!bought){
+    //         int buynow=-prices[idx]+profit(prices, fee, idx+1, true);
+    //         int notbuy=profit(prices, fee, idx+1, false);
 
-            return Math.max(buynow, notbuy);
-        }
+    //         return Math.max(buynow, notbuy);
+    //     }
 
-        int sellnow=prices[idx]-fee+profit(prices, fee, idx+1, false);
-        int notsell=profit(prices, fee, idx+1, true);
+    //     int sellnow=prices[idx]-fee+profit(prices, fee, idx+1, false);
+    //     int notsell=profit(prices, fee, idx+1, true);
 
-        return Math.max(sellnow, notsell);
-    }
+    //     return Math.max(sellnow, notsell);
+    // }
 }
