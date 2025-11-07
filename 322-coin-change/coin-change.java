@@ -1,31 +1,40 @@
 class Solution {
-    public int coinChange(int[] coin, int amount) {
-        int[][] dp=new int[coin.length+1][amount+1];
-        for(int i=1;i<dp[0].length;i++){
-            dp[0][i]=Integer.MAX_VALUE;
+    public int coinChange(int[] coins, int amount) {
+        int[][] dp=new int[amount+1][coins.length];
+        for(int i=0;i<dp.length;i++){
+            Arrays.fill(dp[i],-2);
         }
-
-        for(int idx=1;idx<dp.length;idx++){
-            for(int a=1;a<=amount;a++){
-                if(coin[idx-1]<=a){
-                    int take=dp[idx][a-coin[idx-1]];
-                    if(take!=Integer.MAX_VALUE)
-                    take+=1;
-
-                    dp[idx][a]=Math.min(take,dp[idx-1][a]);
-                }
-                else{
-                    dp[idx][a]=dp[idx-1][a];
-                }
-
-            }
+        return noofcoins(coins, amount, coins.length-1,dp);
+    }
+    public int noofcoins(int[] coins, int amt, int idx, int[][] dp){
+        if(amt==0){
+            return 0;//number of coins 
         }
-        int ans=dp[coin.length][amount];
-        if(ans==Integer.MAX_VALUE){
-            return -1;
+        if(idx==-1 || amt<0){
+            return -1;//cannot be taken
         }
+        if(dp[amt][idx]!=-2){
+            return dp[amt][idx];
+        }
+        int takecoin=noofcoins(coins, amt-coins[idx], idx,dp);
+        int leavecoin=noofcoins(coins, amt, idx-1,dp);
 
-        return ans;
+        if(takecoin==-1 && leavecoin==-1){
+            //cannot be taken in any case
+            return  dp[amt][idx]=-1;
+        }
+        else if(takecoin==-1){
+            //leavecoin func is feasible
+            return dp[amt][idx]= leavecoin;
+        }
+        else if(leavecoin==-1){
+            //takecoin is feasible
+            return dp[amt][idx]= 1+takecoin;
+        }
+        
+
+        return dp[amt][idx]= Math.min(1+takecoin,leavecoin);
+
     }
    
 }
