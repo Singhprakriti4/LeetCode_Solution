@@ -1,43 +1,34 @@
 class Solution {
     public int maxProfit(int[] prices) {
 
-        HashMap<String,Integer> map=new HashMap<>(); 
+        int[][][] dp=new int[prices.length+1][3][2];
+        //index, chnaces, bought(1) or not(0)
 
-        return profit(prices, 0, 2, false, map);
-
-    }
-    public int profit(int[] prices, int idx, int chances, boolean bought
-    , HashMap<String,Integer> map){
-
-        if(chances==0){
-            return 0;
-        }
-        if(idx==prices.length){
-            return 0;
+        for(int i=0;i<3;i++){
+            for(int j=0;j<2;j++){
+                dp[prices.length][i][j]=0;//when we reach the end of the array
+            }
         }
 
-        String key=idx+":"+chances+":"+bought;
-        if(map.containsKey(key)){
-            return map.get(key);
+        for(int i=0;i<prices.length+1;i++){
+            for(int j=0;j<2;j++){
+                dp[i][0][j]=0;//when chances are over
+            }
         }
 
-        
-        if(bought==false){
-            //not yet bought anything
-            //options: buy curr stock / donot buy curr stock
-            int opt1=-prices[idx]+profit(prices, idx+1, chances, true, map);
-            int opt2=profit(prices, idx+1, chances, bought, map);
+        for(int row=prices.length-1;row>=0;row--){//when row=prices.length, we have the ans already
+            for(int col=2;col>=1;col--){//when chances==0 we have the ans alraedy
+               int trueval=1;//bought a stock previously, want to sell
+               int falseval=0;//did not buy
 
-            map.put(key,Math.max(opt1,opt2));
-            return map.get(key);
+               dp[row][col][falseval]=Math.max(dp[row+1][col][1]-prices[row],
+                                               dp[row+1][col][0]);
+
+                dp[row][col][trueval]=Math.max(dp[row+1][col-1][0]+prices[row],
+                                               dp[row+1][col][trueval]);
+            }
         }
         
-        //already bought
-        int opt1=prices[idx]+ profit(prices, idx+1, chances-1, false, map);
-        int opt2=profit(prices, idx+1, chances, bought, map);//did not sell
-
-        map.put(key,Math.max(opt1, opt2));
-        return map.get(key);
-        
+        return dp[0][2][0];
     }
 }
