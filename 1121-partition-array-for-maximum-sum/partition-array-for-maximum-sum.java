@@ -32,24 +32,24 @@ class Solution {
         // // }
         // return maxsum(arr, 0, k, dp);
     }
-    public int maxsum(int[] arr, int s, int k, int[] dp){
-        if(s==arr.length){
-            return 0;
-        }
-        if(dp[s]!=-1){
-            return dp[s];
-        }
-        int ans=0;
-        int currmaxval=-1;
+    // public int maxsum(int[] arr, int s, int k, int[] dp){
+    //     if(s==arr.length){
+    //         return 0;
+    //     }
+    //     if(dp[s]!=-1){
+    //         return dp[s];
+    //     }
+    //     int ans=0;
+    //     int currmaxval=-1;
 
-        for(int i=s;i<s+k;i++){
-            if(i>=arr.length) break;
+    //     for(int i=s;i<s+k;i++){
+    //         if(i>=arr.length) break;
 
-            currmaxval=Math.max(currmaxval,arr[i]);
-            int currlen=i-s+1;
-            int currans=currlen*currmaxval + maxsum(arr, i+1, k, dp);
-            ans=Math.max(ans,currans);
-        }
-        return dp[s]=ans;
-    }
+    //         currmaxval=Math.max(currmaxval,arr[i]);
+    //         int currlen=i-s+1;
+    //         int currans=currlen*currmaxval + maxsum(arr, i+1, k, dp);
+    //         ans=Math.max(ans,currans);
+    //     }
+    //     return dp[s]=ans;
+    // }
 }
