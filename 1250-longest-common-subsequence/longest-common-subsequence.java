@@ -1,21 +1,30 @@
 class Solution {
-    public int longestCommonSubsequence(String s1, String s2) {
-        int[] dp=new int[s2.length()+1];
-
-        for(int i=1;i<s1.length()+1;i++){
-            int temp=0;
-            int prev=0;
-            for(int j=1;j<dp.length;j++){
-                temp=dp[j];
-                if(s1.charAt(i-1)==s2.charAt(j-1)){
-                    dp[j]= 1 + prev;
-                }
-                else{
-                    dp[j]= Math.max(dp[j],dp[j-1]); 
-                }
-                prev=temp;
-            }
+    //recursion +memoisation
+    
+    public int longestCommonSubsequence(String text1, String text2) {
+        int[][] dp=new int[text1.length()][text2.length()];
+        for(int i=0;i<dp.length;i++){
+            Arrays.fill(dp[i],-1);
         }
-        return dp[s2.length()];
+        return lcs(text1,text2,0,0,dp);
+    }
+    public int lcs(String s1, String s2, int i, int j,int[][] dp){
+        if(i==s1.length() || j==s2.length()){
+            return 0;
+        }
+        if(dp[i][j]!=-1){
+            return dp[i][j];
+        }
+        int ans=0;
+        if(s1.charAt(i)==s2.charAt(j)){
+            int consider=1+lcs(s1,s2,i+1,j+1,dp);
+            ans=Math.max(ans, consider);
+        }
+
+        int option1=lcs(s1,s2,i+1,j,dp);
+        int option2=lcs(s1,s2,i,j+1,dp);
+
+        ans=Math.max(ans, Math.max(option1, option2));
+        return dp[i][j]=ans;
     }
 }
