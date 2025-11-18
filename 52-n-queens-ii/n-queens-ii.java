@@ -1,14 +1,14 @@
 class Solution {
     //diagonal attack is also considerd
     public int totalNQueens(int n) {
-        return nqueens(n,0,new HashSet<>());
+
+        return nqueens(n,0,new ArrayList<>());
     }
 
-    public int nqueens(int n, int r, Set<int[]> set){
+    public int nqueens(int n, int r, List<int[]> set){
         if(r==n){
             return 1;
         }
-
         //see if we can place the current queen in any of the columns
         int ans=0;
 
@@ -16,17 +16,16 @@ class Solution {
             
             if(checkdiagonal(set,r,i,n) ){
                 //queen can be put here
-                // String s=r+":"+i;
                 int[] s={r,i};
                 set.add(s);
                 ans+=nqueens(n,r+1,set);
-                set.remove(s);
+                set.remove(set.size()-1);
             }
         }
 
         return ans;
     }
-    public boolean checkdiagonal(Set<int[]> set, int r, int c, int n){
+    public boolean checkdiagonal(List<int[]> set, int r, int c, int n){
         for(int[] arr: set){
             int row=arr[0];
             int col=arr[1];
