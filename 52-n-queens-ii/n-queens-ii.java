@@ -2,10 +2,11 @@ class Solution {
     //diagonal attack is also considerd
     public int totalNQueens(int n) {
 
-        return nqueens(n,0,new ArrayList<>());
+        return nqueens(n,0,new HashSet<>(),new HashSet<>(),new HashSet<>());
     }
 
-    public int nqueens(int n, int r, List<int[]> set){
+    public int nqueens(int n, int r, Set<Integer> toplevelleft,
+    Set<Integer> toplevelright, Set<Integer> cols){
         if(r==n){
             return 1;
         }
@@ -13,27 +14,24 @@ class Solution {
         int ans=0;
 
         for(int i=0;i<n;i++){
-            
-            if(checkdiagonal(set,r,i,n) ){
+
+            int top1=i-r;
+            int top2=i+r;
+
+            if(!toplevelleft.contains(top1) && !toplevelright.contains(top2)
+            && !cols.contains(i)){
+
                 //queen can be put here
-                int[] s={r,i};
-                set.add(s);
-                ans+=nqueens(n,r+1,set);
-                set.remove(set.size()-1);
+                toplevelleft.add(top1);
+                toplevelright.add(top2);
+                cols.add(i);
+                ans+=nqueens(n,r+1,toplevelleft,toplevelright,cols);
+                toplevelleft.remove(top1);
+                toplevelright.remove(top2);
+                cols.remove(i);
             }
         }
 
         return ans;
-    }
-    public boolean checkdiagonal(List<int[]> set, int r, int c, int n){
-        for(int[] arr: set){
-            int row=arr[0];
-            int col=arr[1];
-
-            if(col==c) return false;
-            int diff=r-row;
-            if(c-diff==col || c+diff==col) return false;
-        }
-        return true;
     }
 }
