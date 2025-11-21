@@ -9,50 +9,35 @@
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        ArrayList<TreeNode> list1=new ArrayList<>();
-        ArrayList<TreeNode> list2=new ArrayList<>();
-
-        ArrayList<TreeNode> curr1=new ArrayList<>();
-        ArrayList<TreeNode> curr2=new ArrayList<>();
-
-        dfs(root,p,curr1,list1);
-        dfs(root,q,curr2,list2);
-
-        int idx=0;
-        TreeNode ans=root;
-
-        for(int i=0;i< list1.size();i++){
-            System.out.print(list1.get(i)+" ");
-        }
-        System.out.println();
-         for(int i=0;i< list2.size();i++){
-            System.out.print(list2.get(i)+" ");
-        }
-
-        while( idx<list1.size() && idx<list2.size() && list1.get(idx)==list2.get(idx)){
-            ans=list1.get(idx);
-            idx++;
-        }
-       
-        return ans;
+        return lca(root,p,q);
     }
-    public void dfs(TreeNode root, TreeNode target, ArrayList<TreeNode> curr,
-    ArrayList<TreeNode> path){
-
-        if(root==null){
-            return;
+    public TreeNode lca(TreeNode root, TreeNode p, TreeNode q){
+        if(root==p || root==q){
+            return root;
         }
-
-        curr.add(root);
-        if(root==target){
-            // path=new ArrayList<>(curr);
-            path.addAll(curr);
-            curr.remove(curr.size()-1);
-            return;
+        if(root.left==null && root.right==null){
+            //reached the leaf but still didn't find the node
+            return null;
         }
+        TreeNode leftside=null;
+        TreeNode rightside=null;
 
-        dfs(root.left, target, curr, path);
-        dfs(root.right, target, curr, path);
-        curr.remove(curr.size()-1);
+        if(root.left!=null){
+            leftside=lca(root.left,p,q);
+        }
+        if(root.right!=null){
+            rightside=lca(root.right,p,q);
+        }
+        if((leftside==p && rightside==q) ||(leftside==q && rightside==p)){
+            return root;
+        }
+        if(rightside!=null){
+            return rightside;
+        }
+        if(leftside!=null){
+            return leftside;
+        }
+        // System.out.println("rootval: "+root.val);
+        return null;
     }
 }
