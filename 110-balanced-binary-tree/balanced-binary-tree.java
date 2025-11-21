@@ -14,26 +14,20 @@
  * }
  */
 class Solution {
+    boolean ans=true;
     public boolean isBalanced(TreeNode root) {
-        HashMap<TreeNode,Integer> h=new HashMap<>();
-        return helper(root,h);
+        height(root);
+        return ans;
     }
-    public boolean helper(TreeNode root, HashMap<TreeNode,Integer> h) {
-        if(root==null){
-            return true;
-        }
-        if(Math.abs(height(root.left,h)-height(root.right,h))>1) return false;
-
-        return helper(root.left,h) && helper(root.right,h);
-    }
-    public int height(TreeNode root,HashMap<TreeNode,Integer> h ){
+    public int height(TreeNode root){
         if(root==null){
             return 0;
         }
-        if(h.containsKey(root)){
-            return h.get(root);
-        }
-        h.put(root,Math.max(height(root.left,h),height(root.right,h))+1);
-        return h.get(root);
+
+        int leftheight=height(root.left);
+        int rightheight=height(root.right);
+
+        if(Math.abs(leftheight-rightheight)>1) ans=false;
+        return 1+Math.max(leftheight,rightheight);
     }
 }
