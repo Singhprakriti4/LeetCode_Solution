@@ -15,31 +15,41 @@
  */
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
-        List<Integer> ans=new ArrayList<>();
 
-        while(root!=null){
-            if(root.left==null){
-                ans.add(root.val);
-                root=root.right;
-            }
-            else{
-                TreeNode prev=root.left;
-                while(prev.right!=null && prev.right!=root){
-                    prev=prev.right;
-                }
-                if(prev.right==null){
-                prev.right=root;
-                root=root.left;}
-                else{
-                    prev.right=null;
-                    ans.add(root.val);
-                    root=root.right;
-                }
+        Stack<TreeNode> stk=new Stack<>();
+        List<Integer> res=new ArrayList<>();
 
-            }
+        if(root!=null){
+            stk.push(root);
         }
 
-        return ans;
+        while(!stk.isEmpty()){
+            
+            TreeNode node=stk.pop();
 
+            if((node.left==null || node.left.val==-1000) && (node.right==null
+             || node.right.val==-1000)){
+                //all have been done
+                res.add(node.val);
+                node.val=-1000;
+                continue;
+            }
+            if((node.left==null || node.left.val==-1000) &&
+             (!stk.isEmpty() && stk.peek()==node.right)){
+                //right is already pushed
+                res.add(node.val);
+                node.val=-1000;
+                continue;
+            }
+
+            if(node.right!=null && node.right.val!=-1000){
+                stk.push(node.right);
+            }
+            stk.push(node);
+            if(node.left!=null && node.left.val!=-1000){
+                stk.push(node.left);
+            }
+        }
+        return res;
     }
 }
