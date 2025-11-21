@@ -15,40 +15,44 @@
  */
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
-      if(root==null)  
-      return null;
 
-      if(root.val>key){
+       if(root==null){
+        return null;
+       } 
+
+       if(root.val>key){
         root.left=deleteNode(root.left,key);
-      }
-
-     else if(root.val<key){
+        return root;
+       }
+       if(root.val<key){
         root.right=deleteNode(root.right,key);
-      }
-     
-     else{
-        if(root.left==null && root.right==null)
-         return null;
-       else if(root.left==null)
-         return root.right;
-        else if(root.right==null)
+        return root;
+       }
+       //we are at the target node
+
+
+       if(root.left==null && root.right==null){
+        //leaf node
+        return null;
+       }
+
+       if(root.left==null){
+        return root.right;
+       }
+       if(root.right==null){
         return root.left;
+       }
 
-        root.val=findmin(root.right);
-        root.right=deleteNode(root.right,root.val);
-     }
+       //both side is available
+       TreeNode lefthigh=root.left;
 
-     return root;
+       while(lefthigh.right!=null){
+        lefthigh=lefthigh.right;
+       }
 
-    }
+       root.val=lefthigh.val;
+       root.left=deleteNode(root.left,root.val);
+       return root;
 
-    static int findmin(TreeNode root){
-        int min=root.val;
-        while(root!=null){
-            min=root.val;
-            root=root.left;
-        }
-
-        return min;
     }
 }
