@@ -1,37 +1,37 @@
-
-import java.util.HashSet;
-
 class Solution {
+    //get the first and the last occurance of each char
     public int countPalindromicSubsequence(String s) {
-        int ans = 0;
-        HashSet<Character> alreadyCounted = new HashSet<>();
-        
-        // Loop through every pair (i, j) such that i < j
-        for (int i = 0; i < s.length() - 2; i++) {
-            // Skip if the outer character has already been counted
-            if (alreadyCounted.contains(s.charAt(i))) {
-                continue;
+        int ans=0;
+
+        HashMap<Character, List<Integer>> map=new HashMap<>();
+
+        for(int i=0;i<s.length();i++){
+            if(!map.containsKey(s.charAt(i))){
+                map.put(s.charAt(i),new ArrayList<>());
             }
+            map.get(s.charAt(i)).add(i);
+        }
 
-            // Search for matching outer character s[i] at a later position
-            int j = s.length() - 1;
-            while (j >= i + 2 && s.charAt(j) != s.charAt(i)) {
-                j--;
-            }
+        for(Map.Entry<Character, List<Integer>> e: map.entrySet()){
 
-            // If a match for s[i] at position j is found
-            if (s.charAt(j) == s.charAt(i)) {
-                alreadyCounted.add(s.charAt(i)); // Mark this outer character as counted
+            char ch=e.getKey();
+            List<Integer> indices=e.getValue();
 
-                // Count unique middle characters between i+1 and j-1
-                HashSet<Character> middle = new HashSet<>();
-                for (int k = i + 1; k < j; k++) {
-                    middle.add(s.charAt(k));
+            int start=indices.get(0);
+            int end=indices.get(indices.size()-1);
+
+            Set<Character> set=new HashSet<>();
+            for(int i=start+1;i<end;i++){
+                char curr=s.charAt(i);
+                if(!set.contains(curr)){
+                    ans+=1;
+                    set.add(curr);
                 }
-
-                // Add the number of unique middle characters to the answer
-                ans += middle.size();
+                else{
+                    continue;
+                }
             }
+
         }
 
         return ans;
