@@ -14,35 +14,33 @@
  * }
  */
 class Solution {
-    TreeNode ptr;//global pointer 
     public void flatten(TreeNode root) {
-        ptr=root;
-        dfs(root);
-        //send everything to right;
-        helper(root);
+        ll(root);
     }
-    public void dfs(TreeNode root){
+    public TreeNode ll(TreeNode root){
         if(root==null){
-            return;
+            return null;
+        }      
+        TreeNode start=root;
+        //first flatten the left side if it is not null
+        TreeNode leftside=ll(root.left);
+        if(leftside==null){
+            ll(root.right);
         }
-        if(root.left!=null){
-            ptr=root.left;
-            dfs(root.left);
-        }
-        if(root.right!=null){
-            ptr.left=root.right;
-            root.right=null;
-            ptr=ptr.left;
-            dfs(ptr);
-        }
-    }
+        else{
+            //go to the end of the left flattend thing
+            TreeNode leftstart=leftside;
+            TreeNode leftend=leftside;
+            while(leftside.right!=null){
+                leftend=leftend.right;
+                leftside=leftside.right;
+            }
 
-    public void helper(TreeNode root){
-        if(root==null){
-            return;
+            leftend.right=ll(start.right);
+            start.right=leftstart;
+            start.left=null;
+
         }
-        root.right=root.left;
-        root.left=null;
-        helper(root.right);
+        return start;
     }
 }
