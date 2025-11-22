@@ -1,67 +1,57 @@
-// multisource bfs
 class Solution {
     public int orangesRotting(int[][] grid) {
-        int result=bfs(grid);
-        return result;
-    }
+        int m=grid.length;
+        int n=grid[0].length;
 
-    public int bfs(int[][] grid){
-        Queue<int[]> q=new LinkedList<>();
-        int fresh=0;
-        int rotten=0;
+      int totalmin=0;
+      int countfresh=0;
+      Queue<int[]> q=new LinkedList<>();
 
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[0].length;j++){
-                if(grid[i][j]==2){
-                    //rotten
-                    rotten+=1;
-                    q.add(new int[]{i,j});
-                }
-                else if(grid[i][j]==1){
-                    fresh+=1;
-                }
+      for(int i=0;i<grid.length;i++){
+        for(int j=0;j<grid[0].length;j++){
+            if(grid[i][j]==2){
+                q.offer(new int[]{i,j});
+            }
+            if(grid[i][j]==1){
+                countfresh+=1;
             }
         }
+      }  
 
-        q.add(new int[]{-1,-1});
-        int ans=0;
+      q.offer(new int[]{-1,-1});
 
-        //check for edge cases, ans+=1 on null, viisted mark kr dena
-        while(!q.isEmpty()){
-            int[] arr=q.poll();
-            int r=arr[0];
-            int c=arr[1];
+      while(!q.isEmpty()){
 
-            if(r==-1 && c==-1){
-                
-                if(!q.isEmpty()){
-                    ans+=1;
-                    q.add(new int[]{-1,-1});
+        int[] arr=q.poll();
+        int row=arr[0];
+        int col=arr[1];
+
+        if(row!=-1 && col!=-1){
+            //go in four directions in search of fresh oranges
+            int[] rowptr={-1,+1,0,0};
+            int[] colptr={0,0,-1,+1};
+
+            for(int i=0;i<4;i++){
+                int r=rowptr[i]+row;
+                int c=colptr[i]+col;
+                if(r>=0 && r<m && c>=0 && c<n && grid[r][c]==1){
+                    countfresh-=1;
+                    grid[r][c]=2;
+                    q.offer(new int[]{r,c});
                 }
             }
-            else{
-                //go in 4 valid directions+ check for ==1 condition
-                int[] val1={0,0,1,-1};
-                int[] val2={1,-1,0,0};
-
-                for(int i=0;i<4;i++){
-                    int row=val1[i]+r;
-                    int col=val2[i]+c;
-
-                    if(row>=0 && col>=0 && row<grid.length && col<grid[0].length){
-                        if(grid[row][col]==1){
-                            fresh-=1;
-                            grid[row][col]=2;
-                            q.add(new int[]{row, col});
-                        }
-                    }
-                }
-            }
-
+            
         }
-        if(fresh==0)
-        return ans;
+        else{
+            totalmin+=1;
+            if(!q.isEmpty()){
+                q.offer(arr);
+            }
+        }
+      }
 
-        return -1;
+      if(countfresh!=0) return -1;
+
+      return totalmin-1;
     }
 }
