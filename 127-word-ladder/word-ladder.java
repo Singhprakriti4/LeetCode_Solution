@@ -1,89 +1,78 @@
 class Solution {
-    public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-
-        boolean hasbegin=false;
-        boolean hasend=false;
-
-        for(int i=0;i<wordList.size();i++){
-            if(wordList.get(i).equals(beginWord)) hasbegin=true;
-            if(wordList.get(i).equals(endWord)) hasend=true;
+    public int ladderLength(String begin, String end, List<String> wordList) {
+        boolean startpresent=false;
+        boolean endpresent=false;
+        for(String s: wordList){
+            if(s.equals(begin)) startpresent=true;
+            if(s.equals(end)) endpresent=true;
         }
+        if(!endpresent) return 0;
+        if(!startpresent) wordList.add(begin);
 
-        if(hasend==false){
-            return 0;
-        }
+        //making the adjecency list
+        int len=wordList.size();
+        HashMap<String,List<String>> adj=new HashMap<>();
 
-        if(hasbegin==false){
-            wordList.add(beginWord);
-        }
+        for(int i=0;i<len;i++){
+            for(int j=i+1;j<len;j++){
 
-        // HashMap<String,List<String>> adj=new HashMap<>();
-
-        // for(int i=0;i<wordList.size();i++){            
-        //     for(int j=i+1;j<wordList.size();j++){
-        //         if(match(i,j, wordList)){
-        //             if(adj.containsKey(wordList.get(i))){
-        //                 adj.get(wordList.get(i)).add(wordList.get(j));
-        //             }
-        //             else{
-        //                 List<String> list=new ArrayList<>();
-        //                 list.add(wordList.get(j));
-        //                 adj.put(wordList.get(i), list);
-        //             }
-
-        //             if(adj.containsKey(wordList.get(j))){
-        //                 adj.get(wordList.get(j)).add(wordList.get(i));
-        //             }
-        //             else{
-        //                 List<String> list=new ArrayList<>();
-        //                 list.add(wordList.get(i));
-        //                 adj.put(wordList.get(j),list);
-        //             }
-        //         }
-        //     }
-        // }
-
-        HashMap<String, Integer> visited=new HashMap<>();
-        visited.put(beginWord,0);
-
-        Queue<String> q=new LinkedList<>();
-        q.add(beginWord);
-
-        while(!q.isEmpty()){
-            String word=q.poll();
-        //iterate on adj and non visited ones. if end found -> directly return
-        //     if(adj.containsKey(word)){
-        //     List<String> neighbours=adj.get(word);
-        //     for(int i=0;i<neighbours.size();i++){
-        //         if(!visited.containsKey(neighbours.get(i))){
-        //             visited.put(neighbours.get(i), visited.get(word)+1);
-        //             q.add(neighbours.get(i));
-        //             if(neighbours.get(i).equals(endWord)){
-        //                 return visited.get(endWord)+1;
-        //             }
-        //         }
-        //     }
-        // }
-        for(int i=0;i<wordList.size();i++){
-            if(match(word,i,wordList) && !visited.containsKey(wordList.get(i))){
-                visited.put(wordList.get(i),visited.get(word)+1);
-                q.add(wordList.get(i));
-                if(wordList.get(i).equals(endWord)){
-                    return visited.get(endWord)+1;
+                if(valid(wordList, i,j)){
+                    String a=wordList.get(i);
+                    String b=wordList.get(j);
+                    if(!adj.containsKey(a)) adj.put(a, new ArrayList<>());
+                    if(!adj.containsKey(b)) adj.put(b, new ArrayList<>());
+                    adj.get(a).add(b);
+                    adj.get(b).add(a);
                 }
+
             }
         }
+        if(begin.equals(end)) return 1;
+
+        boolean founded=false;
+        int dist=1;
+        Set<String> visited=new HashSet<>();
+        Queue<String> q=new LinkedList<>();
+
+        q.add(begin);
+        visited.add(begin);
+        q.add("");
+
+        while(!q.isEmpty()){
+            String str=q.poll();
+            if(str.equals("")){
+                dist+=1;
+                if(!q.isEmpty()){
+                    q.add(str);
+                }
+            }
+            else{
+                //go to all the possible neighbours that are not visited
+                if(adj.containsKey(str)){
+                    List<String> nei=adj.get(str);
+                    for(String n: nei){
+                        if(!visited.contains(n)){
+                            //if it what we are looking for
+                            if(n.equals(end)){
+                                founded=true;
+                                return dist+1;
+                            }
+                            else{
+                                visited.add(n);
+                                q.add(n);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         return 0;
     }
-
-    public boolean match(String s1,int j, List<String> wordlist){
+    public boolean valid(List<String> list, int i, int j){
+        String s1=list.get(i);
+        String s2=list.get(j);
         int diff=0;
-        // String s1=wordlist.get(i);
-        String s2=wordlist.get(j);
-
-        if(s1.length()!=s2.length()) return false;
 
         for(int k=0;k<s1.length();k++){
             if(s1.charAt(k)!=s2.charAt(k)){
@@ -91,8 +80,6 @@ class Solution {
             }
         }
 
-        if(diff==1) return true;
-
-        return false;
+        return diff==1;
     }
 }
