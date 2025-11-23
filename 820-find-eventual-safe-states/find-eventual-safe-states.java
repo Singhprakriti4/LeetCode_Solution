@@ -2,6 +2,7 @@ class Solution {
     //cycle detection in directed graph
     public List<Integer> eventualSafeNodes(int[][] graph) {
         Set<Integer> set=new HashSet<>();
+        Set<Integer> unsafe=new HashSet<>();
         
         for(int i=0;i<graph.length;i++){
             if(graph[i].length==0){
@@ -12,7 +13,7 @@ class Solution {
         for(int i=0;i<graph.length;i++){
             if(!set.contains(i)){
                 int[] currpath=new int[graph.length];
-                dfs(currpath, i, set, graph);
+                dfs(currpath, i, set, graph, unsafe);
             }
         }
 
@@ -26,7 +27,8 @@ class Solution {
        
     }
     public boolean dfs(int[] currpath, int currnode, 
-    Set<Integer> set, int[][] graph){
+    Set<Integer> set, int[][] graph, Set<Integer> unsafe){
+        if(unsafe.contains(currnode)) return false;
         if(set.contains(currnode)) return true;
         boolean ans=true;
         currpath[currnode]=1;
@@ -36,11 +38,14 @@ class Solution {
                 return false;
             }
             else{
-                ans= ans && dfs(currpath, n, set, graph);
+                ans= ans && dfs(currpath, n, set, graph, unsafe);
             }
         }
         if(ans){
             set.add(currnode);
+        }
+        else{
+            unsafe.add(currnode);
         }
         currpath[currnode]=0;//reset back to normal
         return ans;
