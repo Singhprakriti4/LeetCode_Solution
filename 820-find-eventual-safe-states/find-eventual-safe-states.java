@@ -11,10 +11,11 @@ class Solution {
         }
 
         for(int i=0;i<graph.length;i++){
-            if(!set.contains(i)){
+            if(!set.contains(i) && !unsafe.contains(i)){
                 int[] currpath=new int[graph.length];
                 dfs(currpath, i, set, graph, unsafe);
             }
+
         }
 
         List<Integer> ans=new ArrayList<>();
