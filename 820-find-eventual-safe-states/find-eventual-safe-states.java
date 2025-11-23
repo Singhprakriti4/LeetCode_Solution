@@ -1,61 +1,48 @@
 class Solution {
-    //cycle detection in directed graph (dfs)
+    //cycle detection in directed graph
     public List<Integer> eventualSafeNodes(int[][] graph) {
+        Set<Integer> set=new HashSet<>();
+        
+        for(int i=0;i<graph.length;i++){
+            if(graph[i].length==0){
+                set.add(i);//safe state
+            }
+        }
 
-        // boolean[] notsafe=new boolean[graph.length];
-        Set<Integer> safe=new HashSet<>();
-        Set<Integer> unsafe=new HashSet<>();
-
-        boolean[] visited=new boolean[graph.length];
-        boolean[] currpath=new boolean[graph.length];
-
-        for(int i=0;i<visited.length;i++){
-
-                if(hascycle(visited,currpath,i,graph,unsafe,safe)){
-                    unsafe.add(i);
-                }
-                else{
-                    safe.add(i);
-                }
+        for(int i=0;i<graph.length;i++){
+            if(!set.contains(i)){
+                int[] currpath=new int[graph.length];
+                dfs(currpath, i, set, graph);
+            }
         }
 
         List<Integer> ans=new ArrayList<>();
-
-        for(int node: safe){
-
-            ans.add(node);
+        for(int v: set){
+            ans.add(v);
         }
-         Collections.sort(ans);
-         return ans;
+        Collections.sort(ans);
+        return ans;
 
+       
     }
-    public boolean hascycle(boolean[] visited, boolean[] currpath, int src,
-     int[][] graph, Set<Integer> unsafe, Set<Integer> safe){
-        visited[src]=true;
-        currpath[src]=true;
-
-        // if(notsafe[src]) return true;
-        if(unsafe.contains(src)){
-            return true;
-        }
-        if(safe.contains(src)){
-            return false;
-        }
-        
-        for(int i=0;i<graph[src].length;i++){
-            int node=graph[src][i];
-             if(unsafe.contains(node)){
-                return true;
+    public boolean dfs(int[] currpath, int currnode, 
+    Set<Integer> set, int[][] graph){
+        if(set.contains(currnode)) return true;
+        boolean ans=true;
+        currpath[currnode]=1;
+        for(int n: graph[currnode]){
+            //explore all paths from the curr node
+            if(currpath[n]==1){
+                return false;
             }
-            else if(visited[node] && currpath[node]==true){
-                return true;
-            }
-            else if(!visited[node]){
-                if(hascycle(visited,currpath,node,graph,unsafe,safe)) return true;
+            else{
+                ans= ans && dfs(currpath, n, set, graph);
             }
         }
-
-        currpath[src]=false;
-        return false;
+        if(ans){
+            set.add(currnode);
+        }
+        currpath[currnode]=0;//reset back to normal
+        return ans;
     }
 }
