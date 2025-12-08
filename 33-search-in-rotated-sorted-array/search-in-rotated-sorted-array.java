@@ -1,53 +1,38 @@
 class Solution {
     public int search(int[] nums, int target) {
-       int start=0;
-       int end=nums.length-1;
-       while(start<=end){
-        int mid=start+(end-start)/2;
-        if(nums[mid]==target){
-            return mid;
-        }
-        else if(nums[mid]>target){
-            if(nums[end]>nums[start]){
-                end=mid-1;
+        int s=0;
+        int e=nums.length-1;
+
+        while(s<=e){
+
+            int m=s+(e-s)/2;
+            System.out.println(m);
+            if(nums[m]==target){
+                return m;
             }
-            else{
-               if(nums[mid]>nums[end]){
-                //first half
-                if(nums[0]<=target){
-                    end=mid-1;
+            if(nums[m]>nums[e]){
+                //left wala side sorted hai(ascending order)
+                if(target>=nums[s] && target<nums[m]){
+                    //ans hmara sorted wale part me hi hai
+                    e=m-1;
                 }
                 else{
-                    start=mid+1;
+                    //sorted wale part me ans nahi hai to eliminate it
+                    s=m+1;
+                    // System.out.o
                 }
-               }
-               else{
-                //second half
-                end=mid-1;
-               }
-            }
-       }
-       else{
-        if(nums[start]<nums[end]){
-            start=mid+1;
-        }
-        else{
-           if(nums[mid]>nums[end]){
-            //first half
-            start=mid+1;
-           }
-           else{
-            //second half
-            if(nums[end]>=target){
-                start=mid+1;
             }
             else{
-                end=mid-1;
+                //right wala part sorted hai
+                if(nums[m]<target && target<=nums[e]){
+                    s=m+1;
+                }
+                else{
+                    e=m-1;
+                    System.out.println("hey");
+                }
             }
-           }
-         }
-       }
-       } 
-       return -1;
+        }
+        return -1;
     }
 }
