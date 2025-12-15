@@ -1,29 +1,31 @@
 class Solution {
     public boolean canJump(int[] nums) {
-      int[] dp=new int[nums.length-1];
-     return jump(nums,0,dp);
+        int[] dp=new int[nums.length];
+        Arrays.fill(dp,-1);
+        //-1:null, 0:false, 1:true
+       return jump(nums,0,dp);     
     }
-    public boolean jump(int[] nums, int idx,int[] dp){
-        if(idx==nums.length-1){
+    public boolean jump(int[] nums, int i, int[] dp){
+        if(i>=nums.length){
+            return false;
+        }
+        if(i==nums.length-1){
             return true;
         }
-        
-        if(dp[idx]!=0){
-            if(dp[idx]==1) return true;
-            else return false;
+        if(dp[i]!=-1){
+            if(dp[i]==0) return false;
+            return true;
         }
         boolean ans=false;
-
-        for(int i=1;i<=nums[idx];i++){
-            boolean curr=jump(nums,idx+i,dp);
-
-        if(curr) {
-                dp[idx]=1;
-                return true;
+        for(int jump=1;jump<=nums[i];jump++){
+            ans= ans || jump(nums, i+jump, dp);
         }
+        if(ans==true){
+            dp[i]=1;
         }
-        
-        dp[idx]=2;
+        else{
+            dp[i]=0;
+        }
         return ans;
     }
 }
