@@ -11,6 +11,7 @@ class Solution {
                 if(i+jump<nums.length){
                     if(dp[i+jump]==1){
                         dp[i]=1;
+                        break;
                     }
                 }
                 else{
