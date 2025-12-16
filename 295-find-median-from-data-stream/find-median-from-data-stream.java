@@ -1,37 +1,37 @@
 class MedianFinder {
+
     PriorityQueue<Integer> minheap;
     PriorityQueue<Integer> maxheap;
 
     public MedianFinder() {
-        //initialize both heaps
         minheap=new PriorityQueue<>();
-        maxheap=new PriorityQueue<>((a,b)->b-a);
+        maxheap=new PriorityQueue<>((a,b)->Integer.compare(b,a));
     }
     
     public void addNum(int num) {
-        //add in the first heap
-       maxheap.add(num);
-       minheap.add(maxheap.poll());
-       if(minheap.size()>maxheap.size()){
-        maxheap.add(minheap.poll());
+       if( maxheap.isEmpty() || num<maxheap.peek() ){
+        maxheap.add(num);
        }
-
+       else{
+        minheap.add(num);
+       }
+       if(maxheap.size()>minheap.size()+1){
+            minheap.add(maxheap.poll());
+        }
+        if(minheap.size()>maxheap.size()+1){
+            maxheap.add(minheap.poll());
+        }
     }
     
     public double findMedian() {
-
-       int firsthalf=maxheap.size();
-       int secondhalf=minheap.size();
-    //    System.out.println("first :" +maxheap.peek());
-    //    System.out.println("second :" + minheap.peek());
-
-       if(firsthalf==secondhalf){
-        //even no of nums
-        return ((double)maxheap.peek()+(double)minheap.peek())/2;
-       }
-
-       //odd number of nums
-       return maxheap.peek();
+        if(maxheap.size()==minheap.size()+1){
+            return maxheap.peek();
+        }
+        else if(minheap.size()==maxheap.size()+1){
+            return minheap.peek();
+        }
+        // System.out.println(maxheap.peek()+" "+minheap.peek());
+        return ((double)maxheap.peek()+minheap.peek())/2;
     }
 }
 
