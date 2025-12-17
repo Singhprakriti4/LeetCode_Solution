@@ -2,13 +2,7 @@ class Solution {
     public long maximumProfit(int[] prices, int k) {
 
       long[][] dp=new long[prices.length][k+1];
-      long result=0;
-
-    //   for(int i=0;i<dp.length-1;i++){
-    //     for(int j=1;j<dp[0].length;j++){
-    //         if(j!=0){
-
-    //   
+      long result=0; 
     
     for(int i=0;i<dp.length;i++){
         for(int j=0;j<dp[0].length;j++){
@@ -38,6 +32,9 @@ class Solution {
                         dp[i][trans+1]=Math.max(dp[i][trans+1],
                         val);
                         result=Math.max(result, dp[i][trans+1]);
+                    }
+                    else{
+                        break;
                     }
                 }
             }
