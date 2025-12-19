@@ -1,44 +1,22 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
-
-      Arrays.sort(intervals, (a,b)-> Integer.compare(a[0],b[0]));
-
-      List<List<Integer>> list=new ArrayList<>();
-      List<Integer> l=new ArrayList<>();
-      l.add(intervals[0][0]);
-      l.add(intervals[0][1]);
-      list.add(l);
-
-      for(int i=1;i<intervals.length;i++){
-        int currstart=intervals[i][0];
-        int currend=intervals[i][1];
-        int prevstart=list.get(list.size()-1).get(0);
-        int prevend=list.get(list.size()-1).get(1);
-        List<Integer> currlist=new ArrayList<>();
-
-        if(currstart<=prevend){
-            //need to be merged
-            list.remove(list.size()-1);
-            currlist.add(prevstart);
-            currlist.add(Math.max(currend,prevend));
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+        LinkedList<int[]> merged = new LinkedList<>();
+        for (int[] interval : intervals) {
+            // if the list of merged intervals is empty or if the current
+            // interval does not overlap with the previous, simply append it.
+            if (merged.isEmpty() || merged.getLast()[1] < interval[0]) {
+                merged.add(interval);
+            }
+            // otherwise, there is overlap, so we merge the current and previous
+            // intervals.
+            else {
+                merged.getLast()[1] = Math.max(
+                    merged.getLast()[1],
+                    interval[1]
+                );
+            }
         }
-        else{
-            //add the new one directly
-            currlist.add(currstart);
-            currlist.add(currend);
-        }
-        list.add(currlist);
-      }
-
-      int[][] mergedintervals=new int[list.size()][2];
-      for(int i=0;i<list.size();i++){
-        int start=list.get(i).get(0);
-        int end=list.get(i).get(1);
-
-        mergedintervals[i][0]=start;
-        mergedintervals[i][1]=end;
-      }
-
-      return mergedintervals;
+        return merged.toArray(new int[merged.size()][]);
     }
 }
