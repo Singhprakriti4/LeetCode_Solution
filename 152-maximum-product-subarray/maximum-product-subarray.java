@@ -1,47 +1,76 @@
 class Solution {
     public int maxProduct(int[] nums) {
-        int ans=Integer.MIN_VALUE;
-        int negidx=-1;
-        int prod=1;
-        int[] grid=new int[nums.length];
-        grid[0]=nums[0];
 
-        for(int i=0;i<nums.length;i++){
-            if(nums[i]==0){
-                grid[i]=1;
-            }
-            else if(i==0){
-                grid[0]=nums[0];
-            }
-            else{
-                grid[i]=grid[i-1]*nums[i];
-            }
-            
-            ans=Math.max(ans,nums[i]);
+       int[] prodsum=new int[nums.length];
+       prodsum[0]=nums[0];
 
-            if(nums[i]!=0){
-                prod*=nums[i];
-                ans=Math.max(ans,prod);
-                if(nums[i]<0 && negidx==-1){
-                    negidx=i;
+       for(int i=1;i<nums.length;i++){
+        if(nums[i]==0 || nums[i-1]==0){
+            prodsum[i]=nums[i];
+        }
+        else{
+            prodsum[i]=nums[i]*prodsum[i-1];
+        }
+       } 
+
+       int ans=Integer.MIN_VALUE;
+
+       int left=0;
+       int leftneg=-1;
+       int rightneg=-1;
+       int right=0;
+
+       while(right<nums.length+1){
+        if(right<nums.length && nums[right]==0) ans=Math.max(ans,0);
+        if(right==nums.length || nums[right]==0 ){
+            // System.out.println(left+" "+right);
+
+            int curr=calculate(left,right-1,prodsum,nums);
+            // System.out.println(curr);
+            curr=Math.max(curr, calculate(leftneg+1,right-1,prodsum,nums));
+            // System.out.println(curr);
+            curr=Math.max(curr, calculate(left,rightneg-1,prodsum,nums));
+            ans=Math.max(ans, curr);
+            // System.out.println(ans+" "+curr);
+            //reset kar do
+            leftneg=-1;
+            rightneg=-1;
+            left=right+1;
+        }
+        else{
+            if(nums[right]<0){
+                if(leftneg==-1){
+                    leftneg=right;
+                    rightneg=right;
+                }
+                else{
+                    rightneg=right;
                 }
             }
-            else{
-                //see by excluding till negidx
-                if(negidx!=i-1 && negidx!=-1){
-                    //see by removing the first occurance of the negative elemnt
-                    //this will handle the odd no of neg elements wala problem
-                ans=Math.max(ans, grid[i-1]/grid[negidx]);
-                }
-                negidx=-1;
-                prod=1;
+        }
+        right++;
+       }
+        
+        int curr2=calculate(left,right-1,prodsum,nums);
+        curr2=Math.max(curr2, calculate(leftneg+1,right-1,prodsum,nums));
+        curr2=Math.max(curr2, calculate(left,rightneg-1,prodsum,nums));
+        ans=Math.max(ans, curr2);
+        // System.out.println(ans+" "+curr2);
+       //last block must still be not processed
+       return ans;
+    }
+    public int calculate(int left, int right, int[] prodsum,int[] nums){
+        if(left>right || left<0 || right<0 || right>=prodsum.length){
+            return Integer.MIN_VALUE;
+        }
+        int ans=prodsum[right];
+        if(left-1>=0){
+            if(nums[left-1]!=0){
+               ans/=prodsum[left-1];
             }
         }
 
-        //if in case 0 never appeared then i will ahve to take that into account
-        if(negidx!=-1 && negidx!=nums.length-1){
-            ans=Math.max(ans, grid[nums.length-1]/grid[negidx]);
-        }
+        // ans=Math.max()
         return ans;
     }
 }
