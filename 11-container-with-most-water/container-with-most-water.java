@@ -1,18 +1,22 @@
 class Solution {
+    // min(h2,h1)*i2-i1
     public int maxArea(int[] height) {
-        int max=0,i=0,j=height.length-1,current=0;
+        int i=0; 
+        int j=height.length-1;
+        int ans=0;
+
         while(i<j){
-            current=(j-i)*(Math.min(height[i],height[j]));
-            if(max<current){
-                max=current;
+            int curr=Math.min(height[i],height[j])*(j-i);
+            ans=Math.max(ans, curr);
+            if(height[i]<height[j]){
+                i++;
+                //we try to remove the one with lesser height
             }
-           if(height[i]<height[j]){
-            i++;
-           }
-           else{
-            j--;
-           }
+            else{
+                j--;
+            }
         }
-        return max;
+
+        return ans;
     }
 }
