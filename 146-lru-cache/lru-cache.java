@@ -6,7 +6,7 @@ class LRUCache {
     public LRUCache(int capacity) {
         cap = capacity;
 
-        cache = new LinkedHashMap<>(capacity, 0.75f, true);
+        cache = new LinkedHashMap<>(capacity, 1f, true);
         // true => access-order mode (moves accessed keys to end)
     }
 
