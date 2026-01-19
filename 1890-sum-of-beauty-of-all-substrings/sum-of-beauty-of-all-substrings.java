@@ -3,27 +3,42 @@ class Solution {
         int sum=0;
 
        for(int i=0;i<s.length();i++){
+        
+        int max=Integer.MIN_VALUE;
+
+        int[] arr=new int[26];
+
         for(int j=i;j<s.length();j++){
-            sum+=beauty(s,i,j);
+
+            arr[s.charAt(j)-'a']+=1;
+            int min=Integer.MAX_VALUE;
+
+            for(int v: arr){
+                if(v!=0){
+                    min=Math.min(min,v);
+                    max=Math.max(max,v);
+                }
+            }
+            sum+=(max-min);
         }
        } 
        return sum;
     }
-    public  int beauty(String s, int i, int j){
-        int[] arr=new int[26];
-        // int min=1;
-        for(int k=i;k<=j;k++){
-            arr[s.charAt(k)-'a']+=1;
-        }
-        int min=Integer.MAX_VALUE;
-        int max=Integer.MIN_VALUE;
+    // public  int beauty(String s, int i, int j){
+    //     int[] arr=new int[26];
+    //     // int min=1;
+    //     for(int k=i;k<=j;k++){
+    //         arr[s.charAt(k)-'a']+=1;
+    //     }
+    //     int min=Integer.MAX_VALUE;
+    //     int max=Integer.MIN_VALUE;
 
-        for(int v: arr){
-            if(v!=0){
-                min=Math.min(min, v);
-                max=Math.max(max, v);
-            }
-        }
-        return max-min;
-    }
+    //     for(int v: arr){
+    //         if(v!=0){
+    //             min=Math.min(min, v);
+    //             max=Math.max(max, v);
+    //         }
+    //     }
+    //     return max-min;
+    // }
 }
