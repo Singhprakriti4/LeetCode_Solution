@@ -3,22 +3,21 @@ class Solution {
         Arrays.sort(g);
         Arrays.sort(s);
 
-        int i=0;
-        int j=0;
-        int count=0;
+        int child=0;
+        int size=0;
+        int ans=0;
 
-        while(i<g.length && j<s.length){
-            if(g[i]<=s[j]){
-
-                count+=1;
-                i++;
-                j++;
+        while(size<s.length && child<g.length){
+            if(s[size]>=g[child]){
+                ans+=1;
+                size++;
+                child++;
             }
             else{
-                j++;
+                size++;
             }
         }
 
-        return count;
+        return ans;
     }
 }
