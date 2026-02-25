@@ -35,88 +35,52 @@ class Solution {
             return;
         }
         else{
-            if(ch=='0'){
+            // if(ch=='0'){
             //take(3 ways) or leave
             if(ptr!=-1){
             sb.append(num.charAt(i));
+            if(ch=='0'){
             expression(num, target, sb, i+1, ptr);
+            }
+            else{
+                expression(num, target, sb, i+1, i);
+            }
             sb.deleteCharAt(sb.length()-1);
             }
 
             sb.append('+');
             sb.append(num.charAt(i));
+            if(ch=='0'){
             expression(num, target, sb, i+1, -1);
+            }
+            else{
+            expression(num, target, sb, i+1, i);
+            }
             sb.deleteCharAt(sb.length()-1);
             sb.deleteCharAt(sb.length()-1);
             
             sb.append('-');
             sb.append(num.charAt(i));
+            if(ch=='0'){
             expression(num, target, sb, i+1, -1);
+            }
+            else{
+            expression(num, target, sb, i+1, i);
+            }
             sb.deleteCharAt(sb.length()-1);
             sb.deleteCharAt(sb.length()-1);
 
             sb.append('*');
             sb.append(num.charAt(i));
+            if(ch=='0'){
             expression(num, target, sb, i+1, -1);
-            sb.deleteCharAt(sb.length()-1);
-            sb.deleteCharAt(sb.length()-1);
             }
             else{
-                //if tehre is atrailing o or not
-                if(sb.length()>0 && sb.charAt(sb.length()-1)=='0'){
-                    //zero hai phle for sure
-
-                    if(ptr!=-1){
-                        sb.append(num.charAt(i));
-                        expression(num, target, sb, i+1, i);
-                        sb.deleteCharAt(sb.length()-1);
-                    }
-
-                    sb.append('+');
-                    sb.append(num.charAt(i));
-                    expression(num, target, sb, i+1, i);
-                    sb.deleteCharAt(sb.length()-1);
-                    sb.deleteCharAt(sb.length()-1);
-                    
-                    sb.append('-');
-                    sb.append(num.charAt(i));
-                    expression(num, target, sb, i+1, i);
-                    sb.deleteCharAt(sb.length()-1);
-                    sb.deleteCharAt(sb.length()-1);
-
-                    sb.append('*');
-                    sb.append(num.charAt(i));
-                    expression(num, target, sb, i+1, i);
-                    sb.deleteCharAt(sb.length()-1);
-                    sb.deleteCharAt(sb.length()-1);
-
-                }
-                else{
-                    //zero nahi hai phle
-                    sb.append(num.charAt(i));
-                    expression(num, target, sb, i+1, i);
-                    sb.deleteCharAt(sb.length()-1);
-
-                    sb.append('+');
-                    sb.append(num.charAt(i));
-                    expression(num, target, sb, i+1, i);
-                    sb.deleteCharAt(sb.length()-1);
-                    sb.deleteCharAt(sb.length()-1);
-                    
-                    sb.append('-');
-                    sb.append(num.charAt(i));
-                    expression(num, target, sb, i+1, i);
-                    sb.deleteCharAt(sb.length()-1);
-                    sb.deleteCharAt(sb.length()-1);
-
-                    sb.append('*');
-                    sb.append(num.charAt(i));
-                    expression(num, target, sb, i+1, i);
-                    sb.deleteCharAt(sb.length()-1);
-                    sb.deleteCharAt(sb.length()-1);
-                }
+            expression(num, target, sb, i+1, i);
             }
-        }
+            sb.deleteCharAt(sb.length()-1);
+            sb.deleteCharAt(sb.length()-1);
+            }
         return;
     }
     public long eval(String s){
