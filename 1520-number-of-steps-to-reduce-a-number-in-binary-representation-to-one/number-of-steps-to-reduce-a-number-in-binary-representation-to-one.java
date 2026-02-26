@@ -14,30 +14,17 @@ class Solution {
                 //1: find first zero from the end
                 int i=sb.length()-1;
                 while(i>=0 && sb.charAt(i)!='0' ){
+
+                    sb.setCharAt(i, '0');
                     i--;
                 }
                 
-                if(i!=-1 ){
-                    for(int j=i;j<sb.length();j++){
-                        if(j==i){
-                            sb.setCharAt(j, '1');
-                        }
-                        else{
-                            sb.setCharAt(j, '0');
-                        }
-                    }
+                if(i==-1){
+                    sb.append('0');
+                    sb.setCharAt(0, '1');
                 }
                 else{
-                    //new bit will be added
-                    for(int j=0;j<sb.length();j++){
-                        if(j==0){
-                            sb.setCharAt(j, '1');
-                        }
-                        else{
-                            sb.setCharAt(j, '0');
-                        }
-                    }
-                    sb.append('0');
+                    sb.setCharAt(i, '1');
                 }
 
             }
