@@ -1,7 +1,7 @@
 class Solution {
     public int numSteps(String s) {
         StringBuilder sb=new StringBuilder(s);
-        int count=1;;
+        int count=0;
 
         while(sb.length()!=1){
             if(sb.charAt(sb.length()-1)=='0'){
@@ -43,6 +43,6 @@ class Solution {
             }
             count++;
         }
-        return count-1;
+        return count;
     }
 }
