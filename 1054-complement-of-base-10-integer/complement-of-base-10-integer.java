@@ -1,17 +1,15 @@
 class Solution {
     public int bitwiseComplement(int n) {
-        String binary=Integer.toBinaryString(n);
-        // Syste
-        StringBuilder sb=new StringBuilder();
-        for(int i=0;i<binary.length();i++){
-            if(binary.charAt(i)=='0'){
-                sb.append('1');
-            }
-            else{
-                sb.append('0');
-            }
+        
+        if(n==0) return 1;
+
+        int mask=0;
+        int temp=n;
+        while(temp>0){
+            mask=(mask<<1) | 1;
+            temp=temp>>1;
+        
         }
-        // System.out.println(sb.toString());
-        return Integer.parseInt(sb.toString(),2);
+        return n^mask;
     }
 }
