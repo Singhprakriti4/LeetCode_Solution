@@ -1,49 +1,57 @@
 class Solution {
-    List<List<String>> outer=new ArrayList<>();
+    List<List<String>> ans;
     public List<List<String>> solveNQueens(int n) {
-        int[] usedcols=new int[n];
-        int[] leftdiag=new int[2*n];
-        int[] rightdiag=new int[2*n];
-
-        solve(n,0,new ArrayList<>(),usedcols, leftdiag,rightdiag);
-        return outer;
+        ans=new ArrayList<>();
+        List<String> current=new ArrayList<>();
+        queens(0, current, n);
+        return ans;
     }
-    public void solve(int n, int r, List<String> inner,
-    int[] usedcols, int[] leftdiag, int[] rightdiag){
-        if(r==n){
-            outer.add(new ArrayList<>(inner));
+    public void queens(int row, List<String> current, int n){
+        if(row==n){
+            //we reached the end
+            List<String> last=new ArrayList<>(current);
+            ans.add(last);
             return;
         }
 
         for(int i=0;i<n;i++){
-            int c=i;
-            if(usedcols[i]==0 && leftdiag[c-r+n-1]==0 &&
-            rightdiag[c+r]==0){
-                usedcols[i]=1;
-                leftdiag[c-r+n-1]=1;
-                rightdiag[c+r]=1;
-                //i-1times . 1time q . n-i-1 times .
+            if(possible(current, i)){
                 StringBuilder sb=new StringBuilder();
-                int pre=i;
-                while(pre>0){
+                for(int j=0;j<i;j++){
                     sb.append('.');
-                    pre-=1;
                 }
                 sb.append('Q');
-                int post=n-i-1;
-                while(post>0){
+                for(int j=i+1;j<n;j++){
                     sb.append('.');
-                    post-=1;
                 }
-                String str=sb.toString();
-                inner.add(str);
-                solve(n,r+1,inner,usedcols, leftdiag,rightdiag);
-                inner.remove(str);
-                usedcols[i]=0;
-                leftdiag[c-r+n-1]=0;
-                rightdiag[c+r]=0;
+                current.add(sb.toString());
+                queens(row+1, current, n);
+                current.remove(current.size()-1);
             }
         }
-        return;
+    }
+    public boolean possible(List<String> current, int r){
+        int colleft=r-1;
+        int colright=r+1;
+        int colcurr=r;
+        for(int i=current.size()-1;i>=0;i--){
+            String s=current.get(i);
+            if(colleft>=0 && s.charAt(colleft)=='Q'){
+                return false;
+            }
+            else{
+                colleft-=1;
+            }
+            if(colright<s.length() && s.charAt(colright)=='Q'){
+                return false;
+            }
+            else{
+                colright+=1;
+            }
+            if(s.charAt(colcurr)=='Q'){
+                return false;
+            }
+        }
+        return true;
     }
 }
