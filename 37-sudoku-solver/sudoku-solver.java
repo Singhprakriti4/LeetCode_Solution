@@ -1,103 +1,65 @@
 class Solution {
-    boolean stop;
+    boolean stop=false;
     public void solveSudoku(char[][] board) {
-        // res=new char[board.length][board[0].length];
-        stop=false;
-        boolean[][] fixed=new boolean[board.length][board[0].length];
-        for(int i=0;i<board.length;i++){
-            for(int j=0;j<board[0].length;j++){
-                
-                if(board[i][j]!='.'){
-                    fixed[i][j]=true;
-                }
-
-            }
-        }
-
-        solve(board, fixed, 0, 0);
-      
+        solve(board,0,0);
     }
-    public void solve(char[][] board,boolean[][] fixed,int r,int c){
-        //base case
-        if(r<0 || r>=board.length ||c<0 ||c >=board[0].length){
+    public void solve(char[][] board, int row, int col){
+
+        if(row==board.length){
+            stop=true;
             return;
         }
-        if(r==board.length-1 && c==board[0].length-1){
-            if(fixed[r][c]){
-                // res=board.clone();
-                stop=true;
-                return;
+        if(stop) return;
+        if(board[row][col]!='.'){
+            if(col==board[0].length-1){
+                solve(board, row+1, 0);
             }
             else{
-                //try all options
-                for(int i=1;i<=9;i++){
-                    if(valid(board,r,c,(char)('0'+i))){
-                        board[r][c]=(char)('0'+i);
-                        // res=board.clone();
-                        stop=true;
-                        if(stop) return;
-                        board[r][c]='.';
-                        return;
-                    }
-                }
+                solve(board, row, col+1);
             }
             return;
         }
 
-        //if current r,c is fixed
-        if(fixed[r][c]){
-            if(c<board[0].length-1){
-                solve(board, fixed, r, c+1);
-            }
-            else{
-                solve(board, fixed, r+1, 0);
-            }
-            if(stop) return;
-        }
-        else{
-            //try out all the possibilities
-            for(int i=1;i<=9;i++){
-                if(valid(board,r,c,(char)('0'+i))){
-                        board[r][c]=(char)('0'+i);
-                        if(c<board[0].length-1){
-                           solve(board, fixed, r, c+1);
-                        }
-                        else{
-                        solve(board, fixed, r+1, 0);
-                        }
-                        if(stop) return;
-                        board[r][c]='.';
+        for(int i=1;i<=9;i++){
+            if(possible(i, board, row, col)){
+                board[row][col]=(char)(i+'0');
+                if(col==8){
+                    solve(board, row+1, 0);
                 }
-                
+                else{
+                    solve(board, row, col+1);
+                }
+                if(stop) return;
+                board[row][col]='.';
             }
         }
+        
     }
-    public boolean valid(char[][] board,int r, int c, char ch){
-        //horizontally, vertically, same block
-        for(int j=0;j<9;j++){
-            //if we get char already existing then return false
-            if(board[r][j]==ch || board[j][c]==ch){
+    public boolean possible(int digit, char[][] arr, int row, int col){
+        for(int i=0;i<9;i++){
+            if(arr[row][i]-'0'==digit || arr[i][col]-'0'==digit){
                 return false;
             }
         }
-        //same block
-        //calculate the starting point
-        int row=0;
-        int col=0;
+        int c=0;
+        if(col>2 && col<6){
+            c=3;
+        }
+        if(col>5)c=6;
 
-        if(r>=0 && r<=2) row=0;
-        if(r>=3 && r<=5) row=3;
-        if(r>=6 && r<=8) row=6;
-
-        if(c>=0 && c<=2) col=0;
-        if(c>=3 && c<=5) col=3;
-        if(c>=6 && c<=8) col=6;
-
-        for(int i=row;i<row+3;i++){
-            for(int j=col;j<col+3;j++){
-                if(board[i][j]==ch) return false;
+        int r=0;
+        if(row>2 && row<6){
+            r=3;
+        }
+        if(row>5){
+            r=6;
+        }
+        for(int i=r;i<r+3;i++){
+            for(int j=c;j<c+3;j++){
+                if(arr[i][j]-'0'==digit) return false;
             }
         }
         return true;
     }
+
 }
