@@ -1,36 +1,28 @@
 class Solution {
-    List<List<Integer>> ans=new ArrayList<>();
+    Set<List<Integer>> result;
     public List<List<Integer>> subsetsWithDup(int[] nums) {
-        ArrayList<Integer> list=new ArrayList<>();
+
         Arrays.sort(nums);
-        ss(nums,0,list);
-        return ans;
+        result=new HashSet<>();
+        combos(nums, 0, new ArrayList<>());
+
+        List<List<Integer>> combinations=new ArrayList<>();
+        for(List<Integer> l: result){
+            combinations.add(l);
+        }
+        return combinations;
     }
-    public void ss(int[] nums,int index,ArrayList<Integer> list){
-        if(index==nums.length){
-            ans.add(new ArrayList<>(list));
+    public void combos(int[] nums, int idx, List<Integer> ans){
+        if(idx==nums.length){
+            List<Integer> test=new ArrayList<>(ans);
+            result.add(test);
             return;
         }
-        //find the count
-        int i=index;
-        int count=1;
-        //calculate count 
-        while(i+1<nums.length && nums[i]==nums[i+1]){
-            count++;
-            i++;
-        }
-        int c=count;
-        while(c!=0){
-            list.add(nums[index]);
-            ss(nums,index+count,list);
-            c--;
-        }
-        while(count!=0){
-            list.remove(list.size()-1);
-            count--;
-        }
-        //without considering
-        ss(nums,i+1,list);
 
+        //take or leave
+        combos(nums, idx+1, ans);
+        ans.add(nums[idx]);
+        combos(nums, idx+1, ans);
+        ans.remove(ans.size()-1);
     }
 }
