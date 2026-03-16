@@ -1,24 +1,40 @@
 class Solution {
-    List<List<Integer>> ans=new ArrayList<>();
-    public List<List<Integer>> combinationSum(int[] candidates, int target){
-        sum(candidates,0,target,new ArrayList<>());
+    List<List<Integer>> ans;
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+
+        ans=new ArrayList<>();
+
+        HashSet<Integer> set=new HashSet<>();
+        for(int num: candidates){
+            set.add(num);
+        }
+
+        int[] arr=new int[set.size()];
+        int idx=0;
+        for(int num: set){
+            arr[idx++]=num;
+        }
+
+        combo(arr, 0, target, new ArrayList<>());
         return ans;
+
     }
-    public void sum(int[] c, int i, int target, List<Integer> inner){
-        if(i==c.length) return;
+    public void combo(int[] arr, int idx, int target, List<Integer> curr){
         if(target==0){
-            List last=new ArrayList<>(inner);
-            ans.add(last);
+            ans.add(new ArrayList<>(curr));
             return;
         }
-        // if(target<0) return;
-        if(target-c[i]>=0){
-            //can be taken
-            inner.add(c[i]);
-            sum(c,i,target-c[i],inner);
-            inner.remove(inner.size()-1);
+        if(target<0 || idx==arr.length){
+            return;
         }
-        //leave
-        sum(c,i+1,target,inner);
+
+        curr.add(arr[idx]);
+        combo(arr, idx, target-arr[idx], curr);
+        curr.remove(curr.size()-1);
+        // curr.add(arr[idx]);
+        // combo(arr, idx+1, target-arr[idx], curr);
+        // curr.remove(curr.size()-1);
+        combo(arr, idx+1, target, curr);
+        return;
     }
 }
