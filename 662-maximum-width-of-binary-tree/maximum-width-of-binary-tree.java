@@ -13,34 +13,25 @@
  *     }
  * }
  */
- //start indexing from 1 always;
 class Solution {
-    int maxwidth=1;
+    int ans=1;
     public int widthOfBinaryTree(TreeNode root) {
-        if(root==null){
-            return 0;
-        }
-        ArrayList<Integer> list=new ArrayList<>();
-        helper(root, list, 1, 0);
-        return maxwidth;
-
+        HashMap<Integer, Integer> map=new HashMap<>();
+        width(root, 0, 1, map);
+        return ans;
     }
-    public void helper(TreeNode root, ArrayList<Integer> list, int idx, int level){
+    public void width(TreeNode root, int level, int index, 
+     HashMap<Integer, Integer> map){
         if(root==null){
             return;
         }
-
-        if(level>= list.size()){
-            //not exists
-            list.add(idx);
+        if(!map.containsKey(level)){
+            map.put(level, index);
         }
         else{
-            //contains first index
-            int curr= idx-list.get(level)+1;
-            if(curr>maxwidth) maxwidth=curr;
+            ans=Math.max(ans, index-map.get(level)+1);
         }
-
-        helper(root.left, list, 2*idx, level+1);
-        helper(root.right, list, 2*idx+1, level+1);
+        width(root.left, level+1, index*2, map);
+        width(root.right, level+1, index*2+1, map);
     }
 }
