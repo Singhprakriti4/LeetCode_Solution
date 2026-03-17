@@ -15,48 +15,23 @@
  */
 class Solution {
     public List<Integer> rightSideView(TreeNode root) {
+        TreeMap<Integer, Integer> map=new TreeMap<>();
+        sideview(root, 0, map);
+        List<Integer> list=new ArrayList<>();
 
-        List<Integer> result=new ArrayList<>();
-        List<List<Integer>> ans=new ArrayList<>();
-        Queue<TreeNode> q=new LinkedList<>();
+        for(Map.Entry<Integer, Integer> e: map.entrySet()){
+            list.add(e.getValue());
+        }
 
+        return list;
+    }
+    public void sideview(TreeNode root, int vd,
+    TreeMap<Integer, Integer> map){
         if(root==null){
-            return result;
+            return;
         }
-        else{
-            q.add(root);
-            q.add(null);
-        }
-        List<Integer> inner=new ArrayList<>();
-
-        while(!q.isEmpty()){
-            TreeNode node=q.poll();
-            if(node!=null){
-                inner.add(node.val);
-                if(node.left!=null){
-                    q.add(node.left);
-                }
-                if(node.right!=null){
-                    q.add(node.right);
-                }
-            }
-            else{
-                ans.add(inner);
-                inner=new ArrayList<>();
-
-                if(!q.isEmpty()){
-                    q.add(null);
-                }
-            }
-        }
-
-        for(int i=0;i<ans.size();i++){
-            List<Integer> res=ans.get(i);
-
-            result.add(res.get(res.size()-1));
-        }
-
-        return result;
-
+        map.put(vd, root.val);
+        sideview(root.left, vd+1, map);
+        sideview(root.right, vd+1, map);
     }
 }
