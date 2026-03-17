@@ -8,55 +8,43 @@
  * }
  */
 class Solution {
+    List<Integer> ans;
     public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
-        //child parent
-        HashMap<TreeNode,TreeNode> map=new HashMap<>();
-        helper(root, null,map );
-
-        //debugging helper
-        // for(Map.Entry<TreeNode,TreeNode> e: map.entrySet()){
-        //     System.out.println(e.getKey() +" "+ e.getValue());
-        //     System.out.println();
-        // }
-
-        List<Integer> ans=new ArrayList<>();
-        dfs(target, 0, k, map, ans );
+        HashMap<TreeNode, TreeNode> parent=new HashMap<>();
+        parentrelation(root, parent);
+        ans=new ArrayList<>();
+        distance(target, k, parent);
         return ans;
-
-
     }
-    //to fill child-parent map
-    public void helper(TreeNode root, TreeNode prev, HashMap<TreeNode,TreeNode> map){
-        if(root==null ){
-            return;
-        }
-        map.put(root,prev);
-
-        helper(root.left, root, map);
-        helper(root.right, root, map);
-    }
-
-    public void dfs(TreeNode root, int currdist, int target,
-    HashMap<TreeNode,TreeNode> map, List<Integer> ans){
-
-        if(root==null || root.val==-1 || currdist>target){
-            return;
-        }
-
-        if(currdist==target){
+    public void distance(TreeNode root, int dist, HashMap<TreeNode, TreeNode> parent){
+        if(dist==0){
             ans.add(root.val);
             return;
         }
-        //explore all 3 paths
-        int previousvalue=root.val;
+        int value=root.val;
         root.val=-1;
-        if(map.containsKey(root)){
-            dfs(map.get(root),currdist+1, target, map, ans);
+        if(root.left!=null && root.left.val!=-1){
+            distance(root.left, dist-1, parent);
         }
-            dfs(root.left, currdist+1, target, map, ans);
-            dfs(root.right, currdist+1, target, map, ans);
-
-        root.val=previousvalue;
+        if(root.right!=null && root.right.val!=-1){
+            distance(root.right, dist-1, parent);
+        }
+        if(parent.containsKey(root) && parent.get(root).val!=-1){
+            distance(parent.get(root), dist-1, parent);
+        }
+        root.val=value;
     }
-
+    public void parentrelation(TreeNode root, HashMap<TreeNode, TreeNode> map){
+        if(root==null){
+            return;
+        }
+        if(root.left!=null){
+            map.put(root.left, root);
+        }
+        if(root.right!=null){
+            map.put(root.right, root);
+        }
+        parentrelation(root.left, map);
+        parentrelation(root.right, map);
+    }
 }
