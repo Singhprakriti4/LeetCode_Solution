@@ -15,44 +15,55 @@
  */
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
-
-       if(root==null){
-        return null;
-       } 
-
-       if(root.val>key){
-        root.left=deleteNode(root.left,key);
+        return delete(root, key);
+    }
+    public TreeNode delete(TreeNode root, int key){
+        if(root==null){
+            return null;
+        }
+        if(key<root.val){
+           root.left=delete (root.left, key);
+        //    return root;
+        }
+        else if(key>root.val){
+            root.right= delete(root.right, key);
+            // return root;
+        }
+        else{
+            if(root.left==null && root.right==null){
+                return null;
+            }
+            TreeNode replace;
+            if(root.left!=null){
+                replace=find(root.left, true);
+                int v=root.val;
+                root.val=replace.val;
+                replace.val=v;
+                root.left=delete(root.left, key);
+            }
+            else{
+                replace=find(root.right, false);
+                int v=root.val;
+                root.val=replace.val;
+                replace.val=v;
+                root.right=delete(root.right, key);
+            }
+        }
         return root;
-       }
-       if(root.val<key){
-        root.right=deleteNode(root.right,key);
-        return root;
-       }
-       //we are at the target node
-
-
-       if(root.left==null && root.right==null){
-        //leaf node
-        return null;
-       }
-
-       if(root.left==null){
-        return root.right;
-       }
-       if(root.right==null){
-        return root.left;
-       }
-
-       //both side is available
-       TreeNode lefthigh=root.left;
-
-       while(lefthigh.right!=null){
-        lefthigh=lefthigh.right;
-       }
-
-       root.val=lefthigh.val;
-       root.left=deleteNode(root.left,root.val);
-       return root;
-
+    }
+    public TreeNode find(TreeNode root, boolean max){
+        if(root.left==null && root.right==null){
+            return root;
+        }
+        if(max){
+            if(root.right==null){
+                return root;
+            }
+            return find(root.right, max);
+        }
+        if(root.left==null){
+            return root;
+        }
+        return find(root.left, max);
     }
 }
