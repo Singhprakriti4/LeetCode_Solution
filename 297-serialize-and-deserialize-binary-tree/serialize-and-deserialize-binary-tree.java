@@ -8,52 +8,55 @@
  * }
  */
 public class Codec {
-
+    StringBuilder sb=new StringBuilder();
     // Encodes a tree to a single string.
-    public String serialize(TreeNode root) {
-
-       StringBuilder sb=new StringBuilder();
-       helper(root,sb);
-       sb.deleteCharAt(sb.length()-1);
-    //    System.out.println(sb.toString());
-       return sb.toString();
-
+    public String serialize(TreeNode root){
+        serial(root);
+        return sb.toString();
     }
-    public void helper(TreeNode root, StringBuilder sb){
+    public void serial(TreeNode root) {
         if(root==null){
-            sb.append("$.");
+            sb.append('n');
+            sb.append(' ');
             return;
         }
-
-        sb.append(root.val+".");
-        helper(root.left, sb);
-        helper(root.right, sb);
+        if(root.left==null && root.right==null){
+            sb.append(root.val);
+            sb.append(' ');
+            sb.append('n');
+            sb.append(' ');
+            sb.append('n');
+            sb.append(' ');
+            return;
+        }
+        //root
+        sb.append(root.val);
+        sb.append(' ');
+        serial(root.left);
+        serial(root.right);
     }
+
 
     // Decodes your encoded data to tree.
+    int idx=-1;
     public TreeNode deserialize(String data) {
-
-        String[] parts = data.split("\\.");
-        return helperdfs(parts);
-
+        String[] arr=data.split(" ");
+        // for(String s: arr){
+        //     System.out.print(s+" ");
+        // }
+        // return null;
+        return deserial(arr);
     }
-    int idx=0;
-    public TreeNode helperdfs(String[] parts){
-        if(idx>=parts.length){
-            return null;
-        }
-        if( parts[idx].equals("$")){
-            idx+=1;
-            return null;
-        }
-        
-        TreeNode root=new TreeNode(Integer.parseInt(parts[idx]));
+    public TreeNode deserial(String[] arr){
         idx+=1;
+        if(arr[idx].equals("n")){
+            return null;
+        }
 
-        root.left=helperdfs(parts);
-        root.right=helperdfs(parts);
-
-        return root;
+        TreeNode n=new TreeNode(Integer.valueOf(arr[idx]));
+        n.left=deserial(arr);
+        n.right=deserial(arr);
+        return n;
     }
 }
 
