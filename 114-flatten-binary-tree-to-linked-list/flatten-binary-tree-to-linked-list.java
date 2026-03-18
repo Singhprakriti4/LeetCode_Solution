@@ -15,32 +15,33 @@
  */
 class Solution {
     public void flatten(TreeNode root) {
-        ll(root);
+       flat(root);
     }
-    public TreeNode ll(TreeNode root){
-        if(root==null){
+    public TreeNode flat(TreeNode root){
+         if(root==null){
             return null;
-        }      
-        TreeNode start=root;
-        //first flatten the left side if it is not null
-        TreeNode leftside=ll(root.left);
-        if(leftside==null){
-            ll(root.right);
+        }
+        if(root.left==null){
+            root.right=flat(root.right);
         }
         else{
-            //go to the end of the left flattend thing
-            TreeNode leftstart=leftside;
-            TreeNode leftend=leftside;
-            while(leftside.right!=null){
-                leftend=leftend.right;
-                leftside=leftside.right;
+            //flatten the left side
+            TreeNode leftchild=root.left;
+            TreeNode rightchild=root.right;
+            root.left=null;
+            root.right=null;
+            TreeNode leftflat=flat(leftchild);
+            // goto the last node of the left side
+
+            TreeNode ptr=leftflat;
+            while(ptr.right!=null){
+                ptr=ptr.right;
             }
-
-            leftend.right=ll(start.right);
-            start.right=leftstart;
-            start.left=null;
-
+            ptr.left=null;
+            root.right=leftflat;
+            ptr.right=flat(rightchild);
+            //attach to
         }
-        return start;
+        return root;
     }
 }
