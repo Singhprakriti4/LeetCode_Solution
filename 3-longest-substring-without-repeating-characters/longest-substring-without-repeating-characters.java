@@ -7,6 +7,7 @@ class Solution {
         int maxlen=0;
 
         while(end<s.length() && start<s.length()){
+            
             char curr=s.charAt(end);
             if(!map.containsKey(curr)){
                 map.put(curr, end);
@@ -15,9 +16,15 @@ class Solution {
                 maxlen=Math.max(maxlen, currlen);
             }
             else{
-                map.remove(s.charAt(start));
-                start+=1;
-                currlen-=1;
+                int to=map.get(curr);
+                System.out.println(to+" "+end);
+                while(start<=to){
+                    map.remove(s.charAt(start));
+                    start++;
+                    currlen-=1;
+                }
+                // end=start;
+                // currlen=0;
             }
         }
 
