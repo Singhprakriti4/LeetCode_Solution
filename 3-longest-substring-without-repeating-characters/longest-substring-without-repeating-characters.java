@@ -15,10 +15,9 @@ class Solution {
                 maxlen=Math.max(maxlen, currlen);
             }
             else{
-                start=map.get(curr)+1;
-                map=new HashMap<>();
-                end=start;
-                currlen=0;
+                map.remove(s.charAt(start));
+                start+=1;
+                currlen-=1;
             }
         }
 
