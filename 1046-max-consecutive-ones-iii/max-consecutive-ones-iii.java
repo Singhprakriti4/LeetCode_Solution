@@ -1,41 +1,34 @@
 class Solution {
     public int longestOnes(int[] nums, int k) {
-        
-        int s=0;
-        int e=0;
-        int len=0;
-        int flipped=0;
-        ArrayList<Integer> list=new ArrayList<>();
-
-        while(e<nums.length && s<nums.length){
-            if(nums[e]==1){
-                len=Math.max(len,e-s+1);
-                e++;
+       int test=0;
+       int currlen=0;
+       int maxlen=0;
+       int start=0;
+       int end=0;
+       while(end<nums.length && start<=nums.length){
+        if(nums[end]==1){
+            currlen+=1;
+            maxlen=Math.max(maxlen, currlen);
+            end++;
+        }
+        else if(test<k){
+            test++;
+            currlen+=1;
+            maxlen=Math.max(currlen, maxlen);
+            end++;
+        }
+        else{
+            if(nums[start]==0){
+                start++;
+                test--;
+                currlen-=1;
             }
             else{
-                //either you can flip or you can't
-                if(flipped<k){
-                    //can be flipped
-                    flipped+=1;
-                    len=Math.max(len,e-s+1);
-                    list.add(e);
-                     e++;
-                }
-                else{
-                    // shift s to the +1 index of first flipped in the frame
-                    if(list.size()==0){
-                        s=e+1;
-                        e=s;
-                    }
-                    else{
-                    int idx=list.get(0);
-                    s=idx+1;
-                    flipped-=1;
-                    list.remove(0);
-                    }
-                }
+                start++;
+                currlen-=1;
             }
         }
-        return len;
+       }
+       return maxlen; 
     }
 }
